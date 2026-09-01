@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>AI生成文本去除重复性方面的研究 1 翻译 | Le blog de Benoit Meteau</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="用于多样化多分支故事生成的回避解码Avoidance Decoding for Diverse Multi-Branch Story Generation  原文出处：Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing（2025年自然语言处理实证方法会议论文集），第 7489–">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI生成文本去除重复性方面的研究 1 翻译">
+<meta property="og:url" content="http://bantmetor.github.io/2026/09/01/essay1/index.html">
+<meta property="og:site_name" content="Le blog de Benoit Meteau">
+<meta property="og:description" content="用于多样化多分支故事生成的回避解码Avoidance Decoding for Diverse Multi-Branch Story Generation  原文出处：Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing（2025年自然语言处理实证方法会议论文集），第 7489–">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-08-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-01T10:23:07.798Z">
+<meta property="article:author" content="BantMetor">
+<meta property="article:tag" content="论文">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Le blog de Benoit Meteau" type="application/atom+xml">
+  
+  
+  
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+  
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+  <nav class="navbar navbar-inverse">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="main-menu-navbar">
+      <ul class="nav navbar-nav">
+        
+          <li><a class=""
+                 href="/index.html">Home</a></li>
+        
+          <li><a class=""
+                 href="/archives/">Archives</a></li>
+        
+      </ul>
+
+      <!--
+      <ul class="nav navbar-nav navbar-right">
+        
+          <li><a href="/atom.xml" title="RSS Feed"><i class="fa fa-rss"></i></a></li>
+        
+      </ul>
+      -->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+  <div class="container">
+    <div class="blog-header">
+  <h1 class="blog-title">Le blog de Benoit Meteau</h1>
+  
+</div>
+
+    <div class="row">
+        <div class="col-sm-8 blog-main">
+          <article id="post-essay1" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
+    
+  
+    <h1 class="article-title" itemprop="name">
+      AI生成文本去除重复性方面的研究 1 翻译
+    </h1>
+  
+
+
+  </header>
+
+  <div class="article-meta">
+    <div class="article-datetime">
+  <a href="/2026/09/01/essay1/" class="article-date"><time datetime="2026-08-31T16:00:00.000Z" itemprop="datePublished">2026-09-01</time></a>
+</div>
+
+    
+    
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="用于多样化多分支故事生成的回避解码"><a href="#用于多样化多分支故事生成的回避解码" class="headerlink" title="用于多样化多分支故事生成的回避解码"></a>用于多样化多分支故事生成的回避解码</h1><p><strong>Avoidance Decoding for Diverse Multi-Branch Story Generation</strong></p>
+<blockquote>
+<p>原文出处：Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing（2025年自然语言处理实证方法会议论文集），第 7489–7505 页，2025年11月4–9日，©2025 Association for Computational Linguistics（计算语言学协会）</p>
+</blockquote>
+<p><strong>作者</strong></p>
+<ul>
+<li>Kyeongman Park（首尔大学 Seoul National University，<a href="mailto:&#x7a;&#x7a;&#97;&#110;&#x67;&#x6d;&#x61;&#110;&#x65;&#64;&#x73;&#110;&#x75;&#46;&#97;&#x63;&#46;&#107;&#x72;">zzangmane@snu.ac.kr</a>）</li>
+<li>Nakyeong Yang（首尔大学，<a href="mailto:&#121;&#x6e;&#121;&#x30;&#53;&#48;&#54;&#x40;&#115;&#110;&#117;&#x2e;&#97;&#99;&#x2e;&#x6b;&#114;">yny0506@snu.ac.kr</a>）</li>
+<li>Kyomin Jung（首尔大学，<a href="mailto:&#107;&#106;&#117;&#110;&#x67;&#x40;&#x73;&#110;&#117;&#x2e;&#x61;&#99;&#46;&#x6b;&#114;">kjung@snu.ac.kr</a>）</li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>大语言模型（LLMs）在给定相同输入提示时，由于创造性多样性有限，常常生成重复且单调的输出，在故事生成等任务中尤为明显。为应对这一挑战，我们提出一种新颖的解码策略——<strong>回避解码（Avoidance Decoding）</strong>，该方法通过对与先前生成输出的相似性施加惩罚来修改词元 logits，从而鼓励生成更具多样性的多分支故事。该惩罚自适应地平衡两种相似性度量：(1) <strong>概念级相似性惩罚（CSP）</strong>，在早期阶段优先应用，以丰富初始故事概念；(2) <strong>叙事级相似性惩罚（NSP）</strong>，在后期逐步加大强调，以确保自然且多样的情节发展。值得注意的是，与强基线相比，我们的方法将输出多样性最高提升 2.6 倍，并将重复率平均降低 30%，同时有效缓解文本退化。此外，我们揭示出该方法能激活更广泛的神经元，表明它利用了模型的内在创造力。</p>
+<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1 引言"></a>1 引言</h2><p>人类作家能就相同的构思写出完全不同的文本。然而，大语言模型（LLMs）在写作创造力上仍难以达到人类水平。此前的研究发现，即便是最先进的模型，如 GPT-4o（OpenAI, 2024），也会生成重复和单调的模式（Zhang et al., 2025; Wu et al., 2025a; Wenger and Kenett, 2025; Lagzian et al., 2025）。这一倾向限制了 LLMs 在需要概念多样性和广泛探索的任务上的表现，例如故事生成（Park et al., 2024a; Materzok, 2025; Huang et al., 2024）和复杂推理（Wang et al., 2024; Sun et al., 2025; Kirk et al., 2023; Wu et al., 2025b）。尤其在故事生成中，该任务带来独特的挑战：它必须通过创造性的构思和叙事吸引读者，因此确保用 LLMs 生成故事时的多样性至关重要。</p>
+<p><strong>图 1</strong>：用于抑制与先前生成故事相似性的回避解码。高亮文本展示了由基于相似性的对比惩罚所引发的故事中最显著的对比。红色下划线标记主要施加概念级相似性惩罚的前部区域，蓝色下划线标记主要施加叙事级相似性惩罚的后部区域。</p>
+<p>（图 1 示意图内容：Storyₜ —— “这是一个美丽的夏日傍晚……”；“Emma 很兴奋地想看看……”；“洛杉矶从不下雨，只是毛毛雨……”；“让我满怀忧郁……”；对比惩罚：log p − α maxᵢ pₛ；Promptᵢ、Story₁、Story₂、Storyₜ₋₁；“创造性与多样化故事生成”）</p>
+<p>现有研究已尝试通过解码期方法提升生成文本的多样性（Welleck et al., 2019; Holtzman et al., 2019; Nguyen et al., 2024; Vijayakumar et al., 2016）。然而，它们未能实现足够的多样性，因为它们只引入了表层的词元级变化，而没有丰富概念、语境或叙事层面的多样性。此外，由于多样性与流畅性之间存在尚未解决的权衡，它们还表现出文本退化（Su et al., 2022; Arias et al., 2024）。</p>
+<p>为克服这些局限，我们提出一种新颖的解码策略——回避解码（Avoidance Decoding）。我们的方法引入一种新的<strong>基于相似性的对比惩罚（Similarity-based Contrastive Penalty）</strong>，它在每个解码步骤通过惩罚当前输出与多个先前生成故事（充当负样本）之间的相似性来修改模型的 logits。因此，在给定单个输入提示时，我们的方法能大幅提升多分支故事的多样性。具体来说，我们的基于相似性的对比惩罚是由两种不同惩罚构成的混合公式：<strong>概念级相似性惩罚（CSP）<strong>和</strong>叙事级相似性惩罚（NSP）</strong>。其一，CSP 通过下一步候选词元的隐藏状态与负样本之间的相似度计算得出，以丰富初始概念表征。其二，NSP 通过生成输出的句子嵌入与负样本之间的相似度计算得出，以确保整体叙事多样性。我们在早期阶段赋予 CSP 更高的权重以确保多样化的故事规划，并随着当前输出长度的增加逐步将重心转向 NSP，以确保自然且多样的情节推进，并将加权和作为最终惩罚。</p>
+<p>因此，无需任何额外训练或随机采样，根据基于 LLM 的多样性评估，我们的方法实现了最高比最佳基线高 2.6 倍的多样性。在 BLEU（Papineni et al., 2002）、ROUGE-L（Lin, 2004）、METEOR（Banerjee and Lavie, 2005）和句子相似度（Reimers and Gurevych, 2019）等自动指标上，与基线相比，我们还将重复率平均降低至少 30%，同时保持对文本退化的鲁棒性。此外，我们发现，我们的方法在迭代式多分支故事生成过程中会激活更广泛的神经元。这表明它利用了模型的内在创造能力，而不仅仅是引入表层的词元级变化。</p>
+<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2 相关工作"></a>2 相关工作</h2><h3 id="2-1-LLM-解码策略"><a href="#2-1-LLM-解码策略" class="headerlink" title="2.1 LLM 解码策略"></a>2.1 LLM 解码策略</h3><span id="more"></span>
+
+<p>针对大语言模型（LLMs）存在各种解码策略，其中一些侧重于促进多样性（Welleck et al., 2019; Holtzman et al., 2019; Fan et al., 2018; Vijayakumar et al., 2016; Nguyen et al., 2024; Zhu et al., 2023）、提升可靠性（Hokamp and Liu, 2017; Wang et al., 2022; Chuang et al., 2023; Guo et al., 2025; Kim et al., 2025），以及实现更流畅、更高质量的生成（Meister et al., 2023; Su et al., 2022; Li et al., 2022; Arias et al., 2024）。在我们的工作中，我们利用对比式解码策略来增强生成过程中的多样性（Su et al., 2022; Welleck et al., 2019; Arias et al., 2024; Li et al., 2022）；不同于先前工作降低与先前生成词元之间的词元级相似性，我们通过惩罚与每个先前生成输出的相似性，来提升多分支样本之间的语境级多样性。</p>
+<h3 id="2-2-多样化故事生成"><a href="#2-2-多样化故事生成" class="headerlink" title="2.2 多样化故事生成"></a>2.2 多样化故事生成</h3><p>存在各种提升故事生成多样性和创造力的方法（Park et al., 2024a; Patel et al., 2024; Fan et al., 2018; Bae and Kim, 2024; Materzok, 2025; Vijayakumar et al., 2016）。一些方法从单个提示出发，以树状结构生成多样化的故事分支，增强创造力和吸引力（Materzok, 2025; Wen et al., 2023; Nottingham et al., 2024; Jaschek et al., 2019; Alabdulkarim et al., 2021）。另一些方法则结合人在环（human-in-the-loop）的交互式故事生成，在关键决策点进行分支（Huang et al., 2024; Ghaffari and Hokamp, 2025）。据我们所知，尚没有方法在解码期针对多分支故事生成增强多样性，这正是我们工作的主要焦点。</p>
+<h2 id="3-问题定义"><a href="#3-问题定义" class="headerlink" title="3 问题定义"></a>3 问题定义</h2><p>给定一个代表故事核心概念或初始构思的固定故事提示，**多分支故事生成（Multi-Branch Story Generation）**聚焦于并行生成多个连贯、流畅的故事延续，这些延续在叙事轨迹上彼此多样。设 Pθ 为语言模型。给定固定故事提示 p，我们将 {x1, …, xn} 记为在条件 p 下由 Pθ 并行生成的故事集合。每个 xi 通过从分布 Pθ(xi_t | p, xi_1:t−1) 中预测下一个词元 xi_t 生成，其中 xi_1:t−1 表示先前已生成的词元。我们定义成对相似性函数 s : X × X → R，其中 X 表示所有可能生成故事（例如词元序列）的空间，s(xi, xj) 量化两个输出 xi 和 xj 之间的语义或结构相似度，如 BLEU 或句子相似度。本任务的目标是：从单个提示 p 生成一组语义上发散的故事 {x1, …, xn}，通过对所有 i ≠ j 最小化 s(xi, xj)，从而确保内容和叙事结构的多样性，同时保持对退化的鲁棒性。</p>
+<h2 id="4-方法"><a href="#4-方法" class="headerlink" title="4 方法"></a>4 方法</h2><p>我们引入一种新颖的解码策略，引导语言模型生成与任何负样本都不相似的输出，同时抵抗退化。在本工作中，我们将同一输入的先前生成输出视为负样本，从而在缓解退化的同时提升多分支故事的多样性。</p>
+<h3 id="4-1-动机"><a href="#4-1-动机" class="headerlink" title="4.1 动机"></a>4.1 动机</h3><p>作为对我们方法的高层次论证，我们提出一种概率动机，说明为何利用对负样本的最大相似性惩罚来对比式地修改词元 logits。假设我们有语言模型 Pθ(xt|x1:t−1) &#x3D; ∏ⱼ₌₁ᵗ Pθ(xj|x1:t−1)，以及表示匹配概率的 Ps(N|x1:t)，用于量化生成文本（附加上下一个候选词元后）与负样本文本 N &#x3D; {n1, …, nN} 的相似程度。然后我们将 P(xt | x1:t−1, ¬N) 定义为：在给定先前语境 x1:t−1、并明确避开 N 中任何负样本的条件下，在步骤 t 生成词元 x 的概率；并将 Ps(¬N | x1:t) 定义为互补的匹配回避概率，即生成文本 x1:t 不与任何负样本 N 匹配的概率。理想情况下，该回避概率应考虑负样本之间的依赖关系：Ps(¬N | x1:t) &#x3D; ∏ᵢ₌₁ᴺ (1 − Ps(ni | x1:t, ¬n1:i−1))。这一公式自然地反映了我们的主要目标：生成与任何先前生成的故事（即负样本）都不相似的输出。然而，在实践中，我们将每个条件匹配概率近似为 Ps(ni | x1:t, ¬n1:i−1) ≈ Ps(ni | x1:t)，以降低计算成本。将其代入乘积式并应用贝叶斯规则得到：</p>
+<p>P(xt | x1:t−1, ¬N) &#x3D; Pθ(xt | x1:t−1) · Ps(¬N | x1:t−1, xt) &#x2F; Ps(¬N | x1:t−1)<br>∝ Pθ(xt | x1:t−1) Ps(¬N | x1:t)<br>&#x3D; Pθ(xt | x1:t−1) ∏ᵢ₌₁ᴺ (1 − Ps(ni|x1:t))　　(1)</p>
+<p>因为在针对 xt 优化时 Ps(¬N | x1:t−1) 是常数。于是我们得到近似公式：</p>
+<p>log P(xt | x1:t−1, ¬N) ≈ log Pθ(xt | x1:t−1) − Σᵢ₌₁ᴺ αi Ps(ni|x1:t)　　(2)</p>
+<p>其中对每个样本使用缩放的一阶近似 log(1 − p) ≈ −αi p。因此，我们对原始词元 logits ℓt（对应概率 P(xt | p, x&lt;t)）施加惩罚，得到调整后的 logits ℓ*t 如下：</p>
+<p>ℓ*t &#x3D; ℓt − Σᵢ₌₁ᴺ αi Ps(ni|x1:t)　　(3)</p>
+<p>公式 (3) 中基于求和的惩罚考虑了所有负证据，类似于 L1 型正则化。为防止负样本累积导致的过度惩罚，我们将调整后的 logits 重新定义为 ℓ′t，类似于 L∞ 型正则化：</p>
+<p>ℓ*t &#x3D; ℓt − maxᵢ₌₁..ᴺ αi Ps(ni|x1:t)　　(4)</p>
+<p>随后贪心解码使用这些修改后的 logits 进行：</p>
+<p>x<em>t &#x3D; argmax_{v∈V} ℓ</em>t(v)　　(5)</p>
+<h3 id="4-2-基于相似性的对比惩罚"><a href="#4-2-基于相似性的对比惩罚" class="headerlink" title="4.2 基于相似性的对比惩罚"></a>4.2 基于相似性的对比惩罚</h3><p>匹配概率 Ps(N|x1:t) 对应于先前工作对比搜索（Contrastive Search）（Su et al., 2022）中引入的退化惩罚。先前工作将退化惩罚计算为候选词元 xt 的隐藏状态与前述词元 x1:t−1 的隐藏状态之间的最大余弦相似度。我们通过旨在降低目标输出与多个负样本之间的相似性来扩展该概率。此外，我们还设计了新颖的惩罚项，同时考虑与这些样本之间的概念级和叙事级相似性。</p>
+<h4 id="4-2-1-概念级相似性惩罚"><a href="#4-2-1-概念级相似性惩罚" class="headerlink" title="4.2.1 概念级相似性惩罚"></a>4.2.1 概念级相似性惩罚</h4><p>我们首先提出 CSP（概念级相似性惩罚），以丰富故事的概念表征。具体来说，我们将 CSP 计算为候选词元的最后隐藏表征与负样本中所有单个词元的最后隐藏表征之间的最大余弦相似度。形式化地，我们计算：</p>
+<p>sCSP_j &#x3D; max_{h′∈H⁻} cos(hj, h′)　　(6)</p>
+<p>其中 hj 是第 j 个候选词元的最后隐藏状态，H⁻ 表示负样本中所有词元的隐藏状态集合。<br>这主要鼓励低层概念空间的多样性，而这对故事规划的多样性有显著影响。</p>
+<h4 id="4-2-2-叙事级相似性惩罚"><a href="#4-2-2-叙事级相似性惩罚" class="headerlink" title="4.2.2 叙事级相似性惩罚"></a>4.2.2 叙事级相似性惩罚</h4><p>然而，施加 CSP 可能会损害故事的整体连贯性和自然性，因为它直接扰动了表征，尤其在长文本生成的后期阶段。因此，我们另外提出 NSP（叙事级相似性惩罚），以鼓励在叙事层面与负样本区分开来。NSP 通过当前输出句子的嵌入（附加候选词元之后）与每个负样本之间的余弦相似度来计算，使用 Sentence-BERT。形式化地，我们计算：</p>
+<p>sNSP_j &#x3D; cos(E(y1:t ⊕ wj), E(x⁻))　　(7)</p>
+<p>其中 E(·) 表示 Sentence-BERT 嵌入函数，y1:t ⊕ wj 是附加 wj 之后的当前输出句子，x⁻ 是负样本句子。<br>该惩罚能显著增强情节多样性，因为它在不损害故事连贯性和自然性的前提下，降低了更高层语境上的语义相似性。</p>
+<h4 id="4-2-3-概念到叙事的混合惩罚"><a href="#4-2-3-概念到叙事的混合惩罚" class="headerlink" title="4.2.3 概念到叙事的混合惩罚"></a>4.2.3 概念到叙事的混合惩罚</h4><p>然而，在生成的早期阶段，当输出尚未形成有意义的句子长度时，NSP 往往过小而无法生效。<br>因此，我们将概念级和叙事级相似性惩罚整合为一个混合公式。具体来说，在早期阶段我们主要依赖 CSP，直到解码步骤到达拐点 T0，以确保多样化的故事规划。然后我们逐步增大 NSP 的权重，以确保生成故事的连贯性和自然性。我们定义混合比例 γ 如下：</p>
+<p>γ &#x3D; δ + (1 − δ) · sigmoid(t − T0)　　(8)</p>
+<p>其中 δ 表示分配给 CSP 的最小权重。然后概念到叙事的混合惩罚计算为：</p>
+<p>s_hybrid_j &#x3D; γ sCSP_j + (1 − γ) sNSP_j　　(9)</p>
+<p>s_hybrid_j 项对应于公式 4 中的匹配概率 Ps(ni | x1:t)，即把候选词元 wj 附加到生成文本 x1:t−1 之后。</p>
+<h3 id="4-3-总体解码流程"><a href="#4-3-总体解码流程" class="headerlink" title="4.3 总体解码流程"></a>4.3 总体解码流程</h3><p>如算法 1 所示，我们首先按照先前研究（Arias et al., 2024）的流程计算候选词元数量 k 和自适应惩罚权重 αACS。接下来，我们应用公式 8 和 9 来计算每个候选词元相对于每个负样本的惩罚，乘以常数超参数 β 进行缩放，并取其中的最大值。最后，我们将 logit 概率 pt(wj) 与惩罚项 s_final_j 结合，以 αACS 加权，计算每个候选的最终得分 Fj，并通过贪心解码选择得分最高的词元。</p>
+<p><strong>算法 1 回避解码（Avoidance Decoding）</strong></p>
+<p>输入：pt, y1:t, {x⁻i}ᵢ₌₁..ᴺ, {H⁻i}ᵢ₌₁..ᴺ<br>1: 计算 k, αACS（Arias et al., 2024）<br>2: 从 pt 中选取 top-k 词元 {wj}ⱼ₌₁..ₖ<br>3: γ &#x3D; δ + (1 − δ) · sigmoid(t − T0)<br>4: for j &#x3D; 1 to k do<br>5: 　　hj ← model(wj | y1:t) 的最后隐藏状态<br>6: 　　for i &#x3D; 1 to N do<br>7: 　　　　sCSP_j[i] ← (max_{h′∈H⁻i} cos(hj, h′))<br>8: 　　　　sNSP_j[i] ← cos(E(y1:t ⊕ wj), E(x⁻i))<br>9: 　　　　s_hybrid_j[i] ← γ·sCSP_j[i] + (1−γ)·sNSP_j[i]<br>10: 　　end for<br>11: 　　s_final_j ← max_i β · s_hybrid_j[i]<br>12: 　　Fj ← (1 − αACS) · pt(wj) − αACS · s_final_j<br>13: end for<br>14: w* ← arg max_j Fj<br>15: return w*</p>
+<p>其中 H⁻i 是第 i 个负样本中所有单个词元的最后隐藏状态集合，pt 是模型的 logits，y1:t 是迄今生成的词元，x⁻i 是第 i 个负样本文本。</p>
+<h2 id="5-实验"><a href="#5-实验" class="headerlink" title="5 实验"></a>5 实验</h2><h3 id="5-1-实验设置"><a href="#5-1-实验设置" class="headerlink" title="5.1 实验设置"></a>5.1 实验设置</h3><p><strong>实现细节</strong>　我们在两块 NVIDIA RTX A5000 GPU 上运行每个解码过程。为加速迭代式词元生成，我们复用上一步解码中注意力模块缓存的 KV 值供下一步使用。我们从 ReedsyPrompts（Park et al., 2024b）和 WritingPrompts（Fan et al., 2018）中收集了 20 个多功能故事提示，这些提示至少能产生 20 个不同的人类故事，并将这些提示作为我们的初始输入。我们将常数标量超参数 β 设为 2.0，以便对词元 logits 产生有意义的影响；将 δ 设为 0.5，以便在整个生成过程中保持足够的低层多样性，这两者均基于经验调参（见附录 J）。</p>
+<p><strong>基线</strong>　我们将方法与若干强基线进行比较：</p>
+<ul>
+<li><strong>Naive、Top-k、Top-p、Typical、Mirostat 和 Min-P 采样</strong>（Holtzman et al., 2019; Meister et al., 2023; Basu et al., 2020; Nguyen et al., 2024）：这些是各种能够增强多样性的随机解码策略。注意，对于 Naive 采样，除了调整温度外，我们不施加任何特殊技术。</li>
+<li><strong>对比搜索（CS）和自适应对比搜索（ACS）</strong>：我们将原始对比搜索及其进阶版本——自适应对比搜索——作为基线。这些方法是我们所提方法的主要动机来源。</li>
+<li><strong>多样性束搜索（DBS）</strong>（Vijayakumar et al., 2016）：对于多样性束搜索，我们将束组数设为候选句子数，以最大化多样性。</li>
+<li><strong>GPT-4o</strong>：我们将 OpenAI 强大的语言模型 GPT-4o 作为一个强基线。</li>
+<li><strong>OursCSP 和 OursNSP</strong>：为证明我们混合惩罚的有效性，我们将两个消融版本作为基线。OursCSP 仅使用 CSP 作为惩罚，而 OursNSP 仅使用 NSP 作为惩罚。注意，OursCSP 深受先前工作（CS）公式的启发，但整合了我们自己的调整。</li>
+</ul>
+<p>对于除消融版本（即 OursCSP 和 OursNSP）之外的所有基线，我们将同一故事提示下所有先前生成的输出反馈到下一次输入中，并指示模型“生成一个与任何已生成输出都不相似的故事”。更详细的信息见附录 G。相比之下，所有 Ours 变体在同一个故事提示的每次迭代步骤中接收完全相同的指令，同时在内部将所有生成的输出存储在**负例记忆（Negative Examples memory）**中，并从中计算最大隐藏状态相似度和句子相似度。</p>
+<h3 id="5-2-主要实验结果"><a href="#5-2-主要实验结果" class="headerlink" title="5.2 主要实验结果"></a>5.2 主要实验结果</h3><h4 id="5-2-1-自动评估指标"><a href="#5-2-1-自动评估指标" class="headerlink" title="5.2.1 自动评估指标"></a>5.2.1 自动评估指标</h4><p>我们使用标准自动评估指标评估基线方法的性能。具体来说，我们首先计算每个提示下生成的所有故事之间的平均相似度。最终得分通过对所有提示的这些值取平均得到。</p>
+<ul>
+<li><strong>BLEU、ROUGE-L、METEOR</strong>：我们利用这些 n-gram 或 unigram 匹配指标作为主要多样性指标。</li>
+<li><strong>Sent-sim</strong>：为量化语义相似度，我们首先使用 Sentence-BERT 将生成输出转换为嵌入向量，然后计算这些向量之间的成对余弦相似度。</li>
+<li><strong>LLM-Score</strong>：我们使用 OpenAI 近期公布的功能强大的推理模型 GPT-o4-mini（OpenAI, 2025），直接评估同一故事提示下多个生成输出的多样性。更详细的评分标准见附录 F。</li>
+<li><strong>Degen</strong>：我们还使用 GPT-o4-mini 以 0–1 的标度评估每个生成输出的退化程度。该评估的评分标准包括“句法完整性（0.25）”、“语义轨迹（0.25）”、“词汇合理性（0.25）”和“噪声症状（0.25）”。更详细的评分标准见附录 E。</li>
+</ul>
+<p><strong>表 5 说明（定性示例）</strong>：<br>提示：请以两个参加相亲（blind date）的人的不同视角写一个故事。</p>
+<ul>
+<li>负样本生成结果（左侧故事，先前的输出）：这是一个美丽的夏日傍晚，夕阳落在繁华的城市上空。Emma 很兴奋，想看看他们之间是否真的有化学反应，但她也有点紧张。（……）与此同时，Ryan 正在为约会做准备，既兴奋又紧张。他整个星期都在期待这一天，但也有点……</li>
+<li>新的生成（右侧故事）：在这个特别的傍晚，细雨似乎渗入我的骨髓，让我满怀忧郁（……）我站在不起眼的小酒馆外，握着一杯灰皮诺葡萄酒（……）“那么，你今天过得怎么样？”“你空闲时间喜欢做什么？”唉，是谁想出这些无聊的开场白的？……</li>
+</ul>
+<p><strong>表 5</strong>：由同一提示生成的两个多分支故事。左侧故事是先前的输出，右侧故事是新的生成。我们高亮了最具对比性的部分，包括情绪、场景和情感。</p>
+<h4 id="5-2-2-多样性与退化的定量分析"><a href="#5-2-2-多样性与退化的定量分析" class="headerlink" title="5.2.2 多样性与退化的定量分析"></a>5.2.2 多样性与退化的定量分析</h4><p>我们在三个温度值（低&#x3D;0.7、中&#x3D;1.0、高&#x3D;1.3）、四个广泛使用的 LLM（Mistral 7B（Jiang et al., 2023）、Llama 3B（Touvron et al., 2024）、Llama 8B、Qwen 7B（Bai et al., 2023））以及两个包含显式故事提示的故事数据集（ReedsyPrompts、WritingPrompts）上应用我们的方法和所有基线。对于每个提示，我们生成 15 个多分支故事，每个 200 词元。然后在这些输出上评估多样性和退化指标。在报告时，我们在三个温度中选择平均退化得分 ≤ 0.1 的案例数量最多的温度设置，因为我们从经验上观察到，一旦退化得分超过 0.1，性能会急剧下降。如果一个模型在所有温度设置下平均退化得分都超过 0.1，则我们报告最低温度设置的结果。由于篇幅限制，本节仅呈现 Mistral-7B 的完整结果和 LLaMA-3B 的前 8 名结果。更全面的结果见附录 D。</p>
+<p>如表 1、2、3 和 4 所示，我们的模型在大多数指标上取得最佳性能。虽然 OursCSP 表现出更高的多样性，但它不算是表现最好的模型，因为它在所有温度设置下的退化率都超过了可接受的 0.1 阈值。另一方面，OursNSP 没有产生退化样本，但整体多样性较低。这些结果表明，我们的混合惩罚方法实现了有效的平衡：与现有基线相比，它显著增强了多样性，同时表现出比仅依赖 CSP 的版本更强的退化鲁棒性。</p>
+<p>此外，CS 和 ACS 的多样性显著偏低，可能源于修改后的指令：它们将先前生成的故事累积到输入提示中作为负样本。这导致语言模型即使在跨故事相同的词元上也表征出不同的隐藏状态。因此，即使当前候选词元与负样本中的词元相同，它们的余弦相似度也会变小。相比之下，我们的方法在各分支间使用完全相同的指令，确保相同词元产生相同的隐藏状态，从而实现准确的逐位置惩罚。</p>
+<h4 id="5-2-3-人工评估"><a href="#5-2-3-人工评估" class="headerlink" title="5.2.3 人工评估"></a>5.2.3 人工评估</h4><p>我们招募了七名人工标注员，让他们按照四项标准以 5 点李克特量表对每个模型的输出打分：</p>
+<ul>
+<li><strong>多样性</strong>：每个故事与其他故事在本质上的差异程度，而不仅仅是角色或主题名称的简单变化。</li>
+<li><strong>退化</strong>：文本在多大程度上保持语法正确性和词汇连贯性而不崩溃。</li>
+<li><strong>创造力</strong>：生成故事的整体原创性和趣味性。</li>
+</ul>
+<p>标注员只评估每组中最后生成的五个输出（样本 11–15），它们表现出最显著的多样性差异。关于人工评估的更详细信息，见附录 C、I。</p>
+<p>如表 6 所示，我们的模型在人工标注员的多样性和创造力两项上都获得最高分，证明了基于相似性的对比惩罚在增强叙事丰富性方面的有效性。此外，与 OursCSP 相比，我们的模型在退化方面表现出更优的性能，证明了概念到叙事混合惩罚对退化的增强鲁棒性。这些结果与 5.2.2 节的定量分析一致，提供了额外的可靠性。</p>
+<h4 id="5-2-4-超参数搜索：T0"><a href="#5-2-4-超参数搜索：T0" class="headerlink" title="5.2.4 超参数搜索：T0"></a>5.2.4 超参数搜索：T0</h4><p>我们使用 Llama-3.1-8B，将拐点超参数 T0（公式 8）从 5 变化到 100，以在多样性与文本退化之间权衡，寻找最佳值。我们将总生成长度固定为 200 词元。如图 2 所示，较大的 T0 值倾向于提高 LLMScore 和退化得分，趋势线斜率分别为 0.0012 和 0.0014。考虑到这一权衡，我们选择 T0 &#x3D; 25 作为最优设置，因为它在退化 ≤ 0.1 的输出中产生最高的多样性。</p>
+<p><strong>图 2</strong>：平均退化得分与 LLMScore 随 T0 的变化。</p>
+<h4 id="5-2-5-最大词元数的影响"><a href="#5-2-5-最大词元数的影响" class="headerlink" title="5.2.5 最大词元数的影响"></a>5.2.5 最大词元数的影响</h4><p>我们使用 Llama-3.2-3B 观察各种模型的退化得分如何随最大词元数的增加而变化。如图 3 所示，与其他采样方法相比，我们的模型表现出更强的退化鲁棒性，直到最大词元长度达到 2000 时才超过 0.1 的退化得分，而其他基线在更短的长度上就表现出明显更高的退化得分。这些结果表明，随着序列长度的增长，我们的方法相比把累积输出直接反馈到指令中，能提供显著更高的退化鲁棒性。</p>
+<p><strong>图 3</strong>：平均退化得分随最大词元数的变化。</p>
+<h4 id="5-2-6-休眠神经元比例分析"><a href="#5-2-6-休眠神经元比例分析" class="headerlink" title="5.2.6 休眠神经元比例分析"></a>5.2.6 休眠神经元比例分析</h4><p>为考察迭代式多分支故事生成过程中神经元激活的范围，我们使用 LLaMA-3.1-8B 模型进行休眠神经元分析（dormant neuron analysis）（Sokar et al., 2023）。由于篇幅限制，完整结果见附录 A。具体来说，若一个全连接层中神经元的 GELU 激活值低于 5 × 10⁻⁵，我们将其视为休眠。如图 4 所示，所有基线方法的神经激活都逐渐降低，表明潜在创造力的下降。然而，我们的方法表现出休眠神经元比例的下降，从而随着迭代次数的增加扩大了神经元激活的范围。这些结果表明，它能更有效地增强模型固有的创造力，而不仅仅是简单地避免重复先前生成的词元。</p>
+<p><strong>图 4</strong>：每次迭代的平均休眠神经元比例。</p>
+<h4 id="5-2-7-定性分析"><a href="#5-2-7-定性分析" class="headerlink" title="5.2.7 定性分析"></a>5.2.7 定性分析</h4><p>表 5 展示了我们的方法如何鼓励相对负样本的概念和叙事发散。在所示示例中，先前生成的故事（左）呈现明亮欢快的场景（如“美丽的夏日傍晚”、“繁华的城市”），并表达期待和紧张。相比之下，新解码的故事（右）采用阴郁的基调与下雨的场景（如“细雨”、“不起眼的小酒馆”），传达忧郁和无聊等情感。情节也从计划好的约会转变为偶遇的酒吧邂逅。这些差异凸显了我们方法的基于相似性的对比惩罚在促进多分支故事的概念和叙事多样性方面的有效性。</p>
+<h2 id="6-结论"><a href="#6-结论" class="headerlink" title="6 结论"></a>6 结论</h2><p>我们提出回避解码（Avoidance Decoding），一种旨在增强多分支故事生成多样性的新颖解码策略。我们的方法基于不同分支故事之间的相似性，使用概念级与叙事级相似性惩罚的混合，对词元 logits 进行对比式惩罚。自动和人工评估一致表明，回避解码在多样性方面显著优于现有基线，同时有效缓解了多样性与退化之间常见的权衡。此外，休眠神经元分析表明，我们的方法培育了更深层的模型创造力，其证据是生成过程中更广泛的神经元激活。</p>
+<h2 id="7-局限性"><a href="#7-局限性" class="headerlink" title="7 局限性"></a>7 局限性</h2><p>虽然回避解码在无需任何额外训练或随机采样的情况下展现出强大的多样性并有效抑制退化，但它存在解码时间增加的缺点。随着负样本数量的增加，这一问题愈发突出。为缓解计算开销，一种可能的解决方案是只在负例记忆中存储最近输出的固定大小窗口，而不是维护整个输出历史。此外，进一步的超参数调优可能会带来退化与多样性之间更好的权衡。</p>
+<h2 id="8-致谢"><a href="#8-致谢" class="headerlink" title="8 致谢"></a>8 致谢</h2><p>我们感谢匿名审稿人提出富有建设性和洞见的意见。K. Jung 供职于韩国首尔国立大学 ASRI。本工作由韩国政府（MSIT）资助的韩国国家研究基金会（NRF）项目（RS-2025-02263628）支持。本工作还部分得到韩国政府（MSIT）资助的信息通信技术规划与评估院（IITP）项目支持 [RS-2021-II211343，人工智能研究生院项目（首尔国立大学）&amp; No.RS-2021-II212068，人工智能创新中心 &amp; No.RS-2022-II220184，低成本符合不断演进伦理政策的 AI 技术开发与研究]。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>（按学术惯例，参考文献保留英文原文，便于检索，未做翻译。）</p>
+<ul>
+<li>Amal Alabdulkarim, Winston Li, Lara J Martin, and Mark O Riedl. 2021. Goal-directed story generation: Augmenting generative language models with reinforcement learning. arXiv preprint arXiv:2112.08593.</li>
+<li>Esteban Garces Arias, Julian Rodemann, Meimingwei Li, Christian Heumann, and Matthias Aßenmacher. 2024. Adaptive contrastive search: Uncertainty-guided decoding for open-ended text generation. arXiv preprint arXiv:2407.18698.</li>
+<li>Minwook Bae and Hyounghun Kim. 2024. Collective critics for creative story generation. arXiv preprint arXiv:2410.02428.</li>
+<li>Jinze Bai, Shuai Bai, Yunfei Chu, Zeyu Cui, Kai Dang, Xiaodong Deng, Yang Fan, Wenbin Ge, Yu Han, Fei Huang, Binyuan Hui, Luo Ji, Mei Li, Junyang Lin, Runji Lin, Dayiheng Liu, Gao Liu, Chengqiang Lu, Keming Lu, Jianxin Ma, Rui Men, Xingzhang Ren, Xuancheng Ren, Chuanqi Tan, Sinan Tan, Jianhong Tu, Peng Wang, Shijie Wang, Wei Wang, Shengguang Wu, Benfeng Xu, Jin Xu, An Yang, Hao Yang, Jian Yang, Shusheng Yang, Yang Yao, Bowen Yu, Hongyi Yuan, Zheng Yuan, Jianwei Zhang, Xingxuan Zhang, Yichang Zhang, Zhenru Zhang, Chang Zhou, Jingren Zhou, Xiaohuan Zhou, and Tianhang Zhu. 2023. Qwen technical report.</li>
+<li>Satanjeev Banerjee and Alon Lavie. 2005. Meteor: An automatic metric for mt evaluation with improved correlation with human judgments. In Proceedings of the acl workshop on intrinsic and extrinsic evaluation measures for machine translation and&#x2F;or summarization, pages 65–72.</li>
+<li>Sourya Basu, Govardana Sachitanandam Ramachandran, Nitish Shirish Keskar, and Lav R Varshney. 2020. Mirostat: A neural text decoding algorithm that directly controls perplexity. arXiv preprint arXiv:2007.14966.</li>
+<li>Yung-Sung Chuang, Yujia Xie, Hongyin Luo, Yoon Kim, James Glass, and Pengcheng He. 2023. Dola: Decoding by contrasting layers improves factuality in large language models. arXiv preprint arXiv:2309.03883.</li>
+<li>Angela Fan, Mike Lewis, and Yann Dauphin. 2018. Hierarchical neural story generation. arXiv preprint arXiv:1805.04833.</li>
+<li>Parsa Ghaffari and Chris Hokamp. 2025. Narrative studio: Visual narrative exploration using llms and monte carlo tree search. arXiv preprint arXiv:2504.02426.</li>
+<li>YiQiu Guo, Yuchen Yang, Zhe Chen, Pingjie Wang, Yusheng Liao, Ya Zhang, Yanfeng Wang, and Yu Wang. 2025. Dsvd: Dynamic self-verify decoding for faithful generation in large language models. arXiv preprint arXiv:2503.03149.</li>
+<li>Chris Hokamp and Qun Liu. 2017. Lexically constrained decoding for sequence generation using grid beam search. arXiv preprint arXiv:1704.07138.</li>
+<li>Ari Holtzman, Jan Buys, Li Du, Maxwell Forbes, and Yejin Choi. 2019. The curious case of neural text degeneration. arXiv preprint arXiv:1904.09751.</li>
+<li>Runsheng Huang, Lara J Martin, Chris Callison-Burch, et al. 2024. What-if: Exploring branching narratives by meta-prompting large language models. arXiv preprint arXiv:2412.10582.</li>
+<li>Corinna Jaschek, Tom Beckmann, Jaime A Garcia, and William L Raffe. 2019. Mysterious murder-mcts-driven murder mystery generation. In 2019 IEEE Conference on Games (CoG), pages 1–8. IEEE.</li>
+<li>Albert Q. Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lucile Saulnier, Lélio Renard Lavaud, Marie-Anne Lachaux, Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas Wang, Timothée Lacroix, and William El Sayed. 2023. Mistral 7b.</li>
+<li>Minbeom Kim, Kang-il Lee, Seongho Joo, Hwaran Lee, Thibaut Thonet, and Kyomin Jung. 2025. Drift: Decoding-time personalized alignments with implicit user preferences. arXiv preprint arXiv:2502.14289.</li>
+<li>Robert Kirk, Ishita Mediratta, Christoforos Nalmpantis, Jelena Luketina, Eric Hambro, Edward Grefenstette, and Roberta Raileanu. 2023. Understanding the effects of rlhf on llm generalisation and diversity. arXiv preprint arXiv:2310.06452.</li>
+<li>Arash Lagzian, Srinivas Anumasa, and Dianbo Liu. 2025. Multi-novelty: Improve the diversity and novelty of contents generated by large language models via inference-time multi-views brainstorming. arXiv preprint arXiv:2502.12700.</li>
+<li>Xiang Lisa Li, Ari Holtzman, Daniel Fried, Percy Liang, Jason Eisner, Tatsunori Hashimoto, Luke Zettlemoyer, and Mike Lewis. 2022. Contrastive decoding: Open-ended text generation as optimization. arXiv preprint arXiv:2210.15097.</li>
+<li>Chin-Yew Lin. 2004. Rouge: A package for automatic evaluation of summaries. In Text summarization branches out, pages 74–81.</li>
+<li>Tobias Materzok. 2025. Cos (m+ o) s: Curiosity and rl-enhanced mcts for exploring story space via language models. arXiv preprint arXiv:2501.17104.</li>
+<li>Clara Meister, Tiago Pimentel, Gian Wiher, and Ryan Cotterell. 2023. Locally typical sampling. Transactions of the Association for Computational Linguistics, 11:102–121.</li>
+<li>Minh Nguyen, Andrew Baker, Clement Neo, Allen Roush, Andreas Kirsch, and Ravid Shwartz-Ziv. 2024. Turning up the heat: Min-p sampling for creative and coherent llm outputs. arXiv preprint arXiv:2407.01082.</li>
+<li>Kolby Nottingham, Ruo-Ping Dong, Ben Kasper, and Wesley N Kerr. 2024. Improving branching language via self-reflection.</li>
+<li>OpenAI. 2024. Gpt-4o system card. <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2410.21276">https://arxiv.org/abs/2410.21276</a>.</li>
+<li>OpenAI. 2025. gpt-o4-mini [large language model]. Accessed: 2025-05-17.</li>
+<li>Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu. 2002. Bleu: a method for automatic evaluation of machine translation. In Proceedings of the 40th annual meeting of the Association for Computational Linguistics, pages 311–318.</li>
+<li>Kyeongman Park, Minbeom Kim, and Kyomin Jung. 2024a. A character-centric creative story generation via imagination. arXiv preprint arXiv:2409.16667.</li>
+<li>Kyeongman Park, Nakyeong Yang, and Kyomin Jung. 2024b. Longstory: Coherent, complete and length controlled long story generation. In Pacific-Asia Conference on Knowledge Discovery and Data Mining, pages 184–196. Springer.</li>
+<li>Zeeshan Patel, Karim El-Refai, Jonathan Pei, and Tianle Li. 2024. Swag: Storytelling with action guidance. arXiv preprint arXiv:2402.03483.</li>
+<li>Nils Reimers and Iryna Gurevych. 2019. Sentence-bert: Sentence embeddings using siamese bert-networks. arXiv preprint arXiv:1908.10084.</li>
+<li>Ghada Sokar, Rishabh Agarwal, Pablo Samuel Castro, and Utku Evci. 2023. The dormant neuron phenomenon in deep reinforcement learning. In International Conference on Machine Learning, pages 32145–32168. PMLR.</li>
+<li>Yixuan Su, Tian Lan, Yan Wang, Dani Yogatama, Lingpeng Kong, and Nigel Collier. 2022. A contrastive framework for neural text generation. Advances in Neural Information Processing Systems, 35:21548–21561.</li>
+<li>Haoran Sun, Yekun Chai, Shuohuan Wang, Yu Sun, Hua Wu, and Haifeng Wang. 2025. Curiosity-driven reinforcement learning from human feedback. arXiv preprint arXiv:2501.11463.</li>
+<li>Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, et al. 2024. Llama 3: Open foundation and instruction models. <a target="_blank" rel="noopener" href="https://ai.meta.com/blog/meta-llama-3/">https://ai.meta.com/blog/meta-llama-3/</a>.</li>
+<li>Ashwin K Vijayakumar, Michael Cogswell, Ramprasath R Selvaraju, Qing Sun, Stefan Lee, David Crandall, and Dhruv Batra. 2016. Diverse beam search: Decoding diverse solutions from neural sequence models. arXiv preprint arXiv:1610.02424.</li>
+<li>Danqing Wang, Jianxin Ma, Fei Fang, and Lei Li. 2024. Typedthinker: Diversify large language model reasoning with typed thinking.</li>
+<li>Xuezhi Wang, Jason Wei, Dale Schuurmans, Quoc Le, Ed Chi, Sharan Narang, Aakanksha Chowdhery, and Denny Zhou. 2022. Self-consistency improves chain of thought reasoning in language models. arXiv preprint arXiv:2203.11171.</li>
+<li>Sean Welleck, Ilia Kulikov, Stephen Roller, Emily Dinan, Kyunghyun Cho, and Jason Weston. 2019. Neural text generation with unlikelihood training. arXiv preprint arXiv:1908.04319.</li>
+<li>Zhihua Wen, Zhiliang Tian, Wei Wu, Yuxin Yang, Yanqi Shi, Zhen Huang, and Dongsheng Li. 2023. Grove: a retrieval-augmented complex story generation framework with a forest of evidence. arXiv preprint arXiv:2310.05388.</li>
+<li>Emily Wenger and Yoed Kenett. 2025. We’re different, we’re the same: Creative homogeneity across llms. arXiv preprint arXiv:2501.19361.</li>
+<li>Zongqian Wu, Tianyu Li, Baoduo Xu, Jiaying Yang, Mengmeng Zhan, Xiaofeng Zhu, and Lei Feng. 2025a. Is depth all you need? an exploration of iterative reasoning in llms.</li>
+<li>Zongqian Wu, Tianyu Li, Baoduo Xu, Jiaying Yang, Mengmeng Zhan, Xiaofeng Zhu, and Lei Feng. 2025b. Is depth all you need? an exploration of iterative reasoning in llms. arXiv preprint arXiv:2502.10858.</li>
+<li>Yiming Zhang, Harshita Diddee, Susan Holm, Hanchen Liu, Xinyue Liu, Vinay Samuel, Barry Wang, and Daphne Ippolito. 2025. Noveltybench: Evaluating language models for humanlike diversity.</li>
+<li>Wenhong Zhu, Hongkun Hao, and Rui Wang. 2023. Penalty decoding: Well suppress the self-reinforcement effect in open-ended text generation. arXiv preprint arXiv:2310.14971.</li>
+</ul>
+<h2 id="附录-A-休眠神经元分析完整结果"><a href="#附录-A-休眠神经元分析完整结果" class="headerlink" title="附录 A　休眠神经元分析完整结果"></a>附录 A　休眠神经元分析完整结果</h2><p>如图 5 所示，在所有基线中，只有我们的模型在迭代过程中表现出休眠神经元比例的下降。具体来说，各方法线性趋势线的斜率为：</p>
+<p>Top-k &#x3D; +0.001540，CS &#x3D; +0.001875，ACS &#x3D; +0.001634，Typical &#x3D; +0.002215，Mirostat &#x3D; +0.001754，CD &#x3D; +0.000615，Min-p &#x3D; +0.001741，Top-p &#x3D; +0.002260，Naive &#x3D; +0.002439，OURS &#x3D; −0.000675。</p>
+<p><strong>图 5</strong>：每次迭代的所有（方法）休眠神经元比例。</p>
+<h2 id="附录-B-退化趋势与迭代次数的关系"><a href="#附录-B-退化趋势与迭代次数的关系" class="headerlink" title="附录 B　退化趋势与迭代次数的关系"></a>附录 B　退化趋势与迭代次数的关系</h2><p>如图 6 所示，在大分支设置中，平均退化得分随迭代次数的增加而升高。这一趋势表明，由于用作负样本的先前生成输出的累积，模型的内在创造能力逐渐耗尽，其语言结构逐渐瓦解。尽管如此，我们的模型始终产生比仅使用 CSP 的消融版本更低的退化得分，证明了混合惩罚即使在高分支配置下的鲁棒性。</p>
+<p><strong>图 6</strong>：平滑后的平均退化得分（窗口&#x3D;10）随迭代次数的变化。</p>
+<h2 id="附录-C-人工评估细节"><a href="#附录-C-人工评估细节" class="headerlink" title="附录 C　人工评估细节"></a>附录 C　人工评估细节</h2><p>我们招募了英语流利的研究生和本科生。被招募的标注员获得了任务定义的详细说明、指令以及每个模型的样本。此外，所有申请者都通过招募公告和说明被告知：他们的标注将用于学术目的，并将发表于论文材料中。</p>
+<p>七名标注员每人拿到三个样本——每个样本由 13 个基线的各五个输出组成——并为每个样本回答三个问题。关于标注员的报酬，合著者先亲自进行了 5 小时标注，以估计相同时间内可完成的平均标注数量。基于这一估计，确定了每个示例 0.5 美元的费率，以确保标注员的报酬至少达到最低工资。</p>
+<p>为评估标注者一致性，我们使用每位标注员的模型级平均分计算了 average-measure ICC(2,k) 值：多样性 0.93、创造力 0.91、退化 0.62，表明所有指标都达到可接受乃至优秀的一致性。</p>
+<h2 id="附录-D-综合实验结果"><a href="#附录-D-综合实验结果" class="headerlink" title="附录 D　综合实验结果"></a>附录 D　综合实验结果</h2><p>表 9、10、11、12、13 和 14 展示了使用 LLaMA 3B、LLaMA 8B 和 Qwen 7B 模型在 ReedsyPrompts 和 WritingPrompts 数据集上的完整实验结果。我们的模型在大多数情况下取得最佳性能；但在 LLaMA 8B 上，其性能与 OursCSP 高度接近，仅存在微小差异。</p>
+<h2 id="附录-E-退化评估细节"><a href="#附录-E-退化评估细节" class="headerlink" title="附录 E　退化评估细节"></a>附录 E　退化评估细节</h2><p>图 7 定义了用于计算退化得分的评分标准，该得分衡量 GPT-4o 输出的退化程度。评估包含四个等权重的维度：句法完整性、语义连贯性、词汇合理性和噪声症状。我们特意设计评分标准，以避免诗歌式、元小说式或风格化句子造成的误报。</p>
+<h2 id="附录-F-LLMScore-评估细节"><a href="#附录-F-LLMScore-评估细节" class="headerlink" title="附录 F　LLMScore 评估细节"></a>附录 F　LLMScore 评估细节</h2><p>图 8 定义了用于计算 LLMScore 的提示和评分标准，该分数评估 GPT-4o 输出的多样性。它强调四个关键维度——视角、风格、情节结构和语言变化。我们鼓励对创造性或表层差异给予慷慨的认可，即使存在共享的语义主题，以确保公平奖励超越词元级重复的富有想象力或结构不同的输出。</p>
+<h2 id="附录-G-基线生成的详细指令"><a href="#附录-G-基线生成的详细指令" class="headerlink" title="附录 G　基线生成的详细指令"></a>附录 G　基线生成的详细指令</h2><p>如图 9 所示，我们将所有基线（除 Ours 变体外）配置为：在重复式多分支故事生成过程中，接收所有先前生成的内容，以及一条鼓励后续分支产生不相似输出的指令。</p>
+<h2 id="附录-H-ChatGPT-的使用与对-OpenAI-条款的遵守"><a href="#附录-H-ChatGPT-的使用与对-OpenAI-条款的遵守" class="headerlink" title="附录 H　ChatGPT 的使用与对 OpenAI 条款的遵守"></a>附录 H　ChatGPT 的使用与对 OpenAI 条款的遵守</h2><p>我们利用 OpenAI 的 ChatGPT 为本文的行文和格式润色提供了有限的协助。所有实质性贡献，包括核心方法论、实验和分析，均由作者独立完成。</p>
+<p>我们的使用符合 OpenAI 的使用条款和使用政策。</p>
+<h2 id="附录-I-自动指标与人工评分之间的相关性"><a href="#附录-I-自动指标与人工评分之间的相关性" class="headerlink" title="附录 I　自动指标与人工评分之间的相关性"></a>附录 I　自动指标与人工评分之间的相关性</h2><p>如表 7 所示，我们对人工评分与自动指标进行了相关性分析。由于人工评估者给多样性更高的输出打更高的分——这与 BLEU、ROUGE-L、METEOR 和余弦相似度等基于相似性的指标相反，但与 LLMScore 一致——我们得出结论：每个指标都与人类判断表现出强相关性。</p>
+<p>此外，我们确实测量了人工评估者之间的标注者间一致性，其表现出强一致性，从而进一步支持我们人工评估的可靠性。</p>
+<h2 id="附录-J-超参数调优的经验实验"><a href="#附录-J-超参数调优的经验实验" class="headerlink" title="附录 J　超参数调优的经验实验"></a>附录 J　超参数调优的经验实验</h2><p>如表 8 所示，我们进行了若干经验性试验来确定超参数值。虽然某些配置产生更高的 LLMScore，但它们也导致退化得分超过 0.1，我们认为这表示严重的性能退化。</p>
+<hr>
+<h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><h3 id="表-1：ReedsyPrompts，Mistral-7B"><a href="#表-1：ReedsyPrompts，Mistral-7B" class="headerlink" title="表 1：ReedsyPrompts，Mistral 7B"></a>表 1：ReedsyPrompts，Mistral 7B</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>2.21</td>
+<td>16.19</td>
+<td>20.95</td>
+<td>48.51</td>
+<td>20.75</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>1.92</td>
+<td>15.53</td>
+<td>21.09</td>
+<td>50.47</td>
+<td>22.60</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>1.25</td>
+<td>10.80</td>
+<td>14.68</td>
+<td>47.22</td>
+<td>23.25</td>
+<td>0.09</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>1.47</td>
+<td>14.13</td>
+<td>18.76</td>
+<td>50.54</td>
+<td>21.75</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>9.64</td>
+<td>27.94</td>
+<td>31.02</td>
+<td>55.16</td>
+<td>19.75</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>12.30</td>
+<td>28.96</td>
+<td>33.26</td>
+<td>53.97</td>
+<td>19.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>52.14</td>
+<td>65.70</td>
+<td>67.35</td>
+<td>66.18</td>
+<td>17.60</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>50.71</td>
+<td>63.80</td>
+<td>66.58</td>
+<td>63.12</td>
+<td>20.50</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>11.99</td>
+<td>25.04</td>
+<td>31.20</td>
+<td>58.81</td>
+<td>25.25</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>18.48</td>
+<td>24.61</td>
+<td>51.89</td>
+<td>22.25</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>0.61</td>
+<td>9.31</td>
+<td>9.95</td>
+<td>25.25</td>
+<td>69.75</td>
+<td>0.15</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>39.87</td>
+<td>48.71</td>
+<td>51.23</td>
+<td>71.44</td>
+<td>25.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.04</td>
+<td>12.57</td>
+<td>14.36</td>
+<td>27.56</td>
+<td>65.40</td>
+<td>0.02</td>
+</tr>
+</tbody></table>
+<h3 id="表-2：Writing-Prompts，Mistral-7B"><a href="#表-2：Writing-Prompts，Mistral-7B" class="headerlink" title="表 2：Writing Prompts，Mistral 7B"></a>表 2：Writing Prompts，Mistral 7B</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>3.32</td>
+<td>14.69</td>
+<td>20.12</td>
+<td>56.22</td>
+<td>30.75</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>2.36</td>
+<td>16.85</td>
+<td>22.58</td>
+<td>57.30</td>
+<td>21.85</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>7.22</td>
+<td>23.83</td>
+<td>29.50</td>
+<td>59.34</td>
+<td>19.50</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>1.92</td>
+<td>15.18</td>
+<td>19.93</td>
+<td>58.84</td>
+<td>21.50</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>15.64</td>
+<td>34.05</td>
+<td>37.27</td>
+<td>65.25</td>
+<td>19.60</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>15.29</td>
+<td>33.55</td>
+<td>36.70</td>
+<td>64.13</td>
+<td>26.85</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>72.02</td>
+<td>80.78</td>
+<td>81.62</td>
+<td>79.88</td>
+<td>15.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>72.49</td>
+<td>81.89</td>
+<td>83.07</td>
+<td>79.09</td>
+<td>17.00</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>13.40</td>
+<td>27.14</td>
+<td>33.12</td>
+<td>66.79</td>
+<td>21.60</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>18.48</td>
+<td>24.61</td>
+<td>51.89</td>
+<td>24.15</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>0.80</td>
+<td>10.83</td>
+<td>11.62</td>
+<td>29.51</td>
+<td>51.50</td>
+<td>0.12</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>35.12</td>
+<td>45.66</td>
+<td>48.75</td>
+<td>73.31</td>
+<td>23.50</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.45</td>
+<td>13.96</td>
+<td>15.72</td>
+<td>35.42</td>
+<td>44.90</td>
+<td>0.05</td>
+</tr>
+</tbody></table>
+<h3 id="表-3：ReedsyPrompts，Llama-3B（正文前-8-名结果）"><a href="#表-3：ReedsyPrompts，Llama-3B（正文前-8-名结果）" class="headerlink" title="表 3：ReedsyPrompts，Llama 3B（正文前 8 名结果）"></a>表 3：ReedsyPrompts，Llama 3B（正文前 8 名结果）</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Top-k</td>
+<td>1.12</td>
+<td>11.85</td>
+<td>17.94</td>
+<td>48.49</td>
+<td>34.25</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>6.22</td>
+<td>17.96</td>
+<td>24.34</td>
+<td>52.50</td>
+<td>29.35</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>20.05</td>
+<td>30.30</td>
+<td>36.20</td>
+<td>60.27</td>
+<td>26.85</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>59.78</td>
+<td>64.91</td>
+<td>67.68</td>
+<td>77.95</td>
+<td>19.00</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>18.48</td>
+<td>24.61</td>
+<td>51.89</td>
+<td>22.25</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>0.85</td>
+<td>11.61</td>
+<td>14.06</td>
+<td>31.73</td>
+<td>60.10</td>
+<td>0.23</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>31.16</td>
+<td>40.02</td>
+<td>43.65</td>
+<td>68.16</td>
+<td>27.20</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.09</td>
+<td>12.40</td>
+<td>15.63</td>
+<td>32.66</td>
+<td>54.25</td>
+<td>0.09</td>
+</tr>
+</tbody></table>
+<h3 id="表-4：Writing-Prompts，Llama-3B（正文前-8-名结果）"><a href="#表-4：Writing-Prompts，Llama-3B（正文前-8-名结果）" class="headerlink" title="表 4：Writing Prompts，Llama 3B（正文前 8 名结果）"></a>表 4：Writing Prompts，Llama 3B（正文前 8 名结果）</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Top-k</td>
+<td>1.12</td>
+<td>12.18</td>
+<td>18.53</td>
+<td>51.74</td>
+<td>32.00</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>4.66</td>
+<td>16.98</td>
+<td>23.67</td>
+<td>55.70</td>
+<td>27.00</td>
+<td>0.08</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>42.59</td>
+<td>48.20</td>
+<td>53.44</td>
+<td>77.84</td>
+<td>17.90</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>68.96</td>
+<td>72.09</td>
+<td>73.45</td>
+<td>86.12</td>
+<td>18.50</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>19.71</td>
+<td>26.11</td>
+<td>58.97</td>
+<td>24.15</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>0.82</td>
+<td>11.54</td>
+<td>14.03</td>
+<td>32.96</td>
+<td>57.25</td>
+<td>0.13</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>28.60</td>
+<td>38.13</td>
+<td>42.54</td>
+<td>69.82</td>
+<td>23.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.05</td>
+<td>11.68</td>
+<td>15.10</td>
+<td>34.03</td>
+<td>50.60</td>
+<td>0.09</td>
+</tr>
+</tbody></table>
+<h3 id="表-6：人工评估得分（均值-±-标准差），各列最佳均值加粗"><a href="#表-6：人工评估得分（均值-±-标准差），各列最佳均值加粗" class="headerlink" title="表 6：人工评估得分（均值 ± 标准差），各列最佳均值加粗"></a>表 6：人工评估得分（均值 ± 标准差），各列最佳均值加粗</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>多样性(↑)</th>
+<th>创造力(↑)</th>
+<th>退化(↑)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>2.14 ± 0.8</td>
+<td>2.33 ± 0.9</td>
+<td>1.53 ± 1.3</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>3.38 ± 1.2</td>
+<td>3.38 ± 1.5</td>
+<td>3.94 ± 1.3</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>2.71 ± 1.1</td>
+<td>3.24 ± 1.5</td>
+<td>4.00 ± 1.3</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>1.62 ± 0.7</td>
+<td>2.81 ± 1.5</td>
+<td>4.06 ± 1.0</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>2.43 ± 1.1</td>
+<td>3.14 ± 1.4</td>
+<td>4.18 ± 1.2</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>2.05 ± 0.9</td>
+<td>3.10 ± 1.4</td>
+<td>3.76 ± 1.3</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>1.10 ± 0.5</td>
+<td>2.95 ± 1.4</td>
+<td>3.76 ± 1.2</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>1.14 ± 0.5</td>
+<td>3.14 ± 1.4</td>
+<td>3.71 ± 1.2</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>2.95 ± 1.2</td>
+<td>3.29 ± 1.4</td>
+<td>3.88 ± 1.4</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>2.62 ± 1.1</td>
+<td>3.33 ± 1.5</td>
+<td>4.00 ± 1.3</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>3.33 ± 1.4</td>
+<td>3.19 ± 1.3</td>
+<td>2.24 ± 1.2</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>1.43 ± 0.6</td>
+<td>2.62 ± 1.5</td>
+<td>4.06 ± 1.0</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>3.48 ± 1.3</td>
+<td>3.71 ± 1.3</td>
+<td>3.06 ± 1.4</td>
+</tr>
+</tbody></table>
+<p>（注：表 6 中“退化(↑)”箭头向上，因为此处评估的是“文本保持语法正确和词汇连贯的程度”，得分越高越好。）</p>
+<h3 id="表-7：指标与人类评分之间的相关性"><a href="#表-7：指标与人类评分之间的相关性" class="headerlink" title="表 7：指标与人类评分之间的相关性"></a>表 7：指标与人类评分之间的相关性</h3><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>Spearman r</th>
+<th>Pearson r</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BLEU (↓)</td>
+<td>-0.73</td>
+<td>-0.68</td>
+</tr>
+<tr>
+<td>ROUGE-L (↓)</td>
+<td>-0.69</td>
+<td>-0.67</td>
+</tr>
+<tr>
+<td>METEOR (↓)</td>
+<td>-0.70</td>
+<td>-0.68</td>
+</tr>
+<tr>
+<td>余弦相似度 (↓)</td>
+<td>-0.72</td>
+<td>-0.72</td>
+</tr>
+<tr>
+<td>LLMScore (↑)</td>
+<td>0.51</td>
+<td>0.46</td>
+</tr>
+</tbody></table>
+<h3 id="表-8：不同-β-δ-配置下的-Degen-得分与-LLMScore"><a href="#表-8：不同-β-δ-配置下的-Degen-得分与-LLMScore" class="headerlink" title="表 8：不同 (β, δ) 配置下的 Degen 得分与 LLMScore"></a>表 8：不同 (β, δ) 配置下的 Degen 得分与 LLMScore</h3><table>
+<thead>
+<tr>
+<th>β</th>
+<th>δ</th>
+<th>Degen 得分</th>
+<th>LLMScore</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2.0</td>
+<td>0.5</td>
+<td>0.090</td>
+<td>54.25</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>0.5</td>
+<td>0.006</td>
+<td>39.50</td>
+</tr>
+<tr>
+<td>3.0</td>
+<td>0.5</td>
+<td>0.175</td>
+<td>67.95</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>0.2</td>
+<td>0.028</td>
+<td>47.25</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>0.8</td>
+<td>0.120</td>
+<td>61.04</td>
+</tr>
+</tbody></table>
+<h3 id="表-9：ReedsyPrompts，Llama-3B（完整）"><a href="#表-9：ReedsyPrompts，Llama-3B（完整）" class="headerlink" title="表 9：ReedsyPrompts，Llama 3B（完整）"></a>表 9：ReedsyPrompts，Llama 3B（完整）</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>8.40</td>
+<td>21.22</td>
+<td>27.60</td>
+<td>52.53</td>
+<td>30.50</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>1.12</td>
+<td>11.85</td>
+<td>17.94</td>
+<td>48.49</td>
+<td>34.25</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>6.22</td>
+<td>17.96</td>
+<td>24.34</td>
+<td>52.50</td>
+<td>29.35</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>32.71</td>
+<td>41.47</td>
+<td>47.06</td>
+<td>67.73</td>
+<td>26.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>9.88</td>
+<td>22.48</td>
+<td>28.90</td>
+<td>55.71</td>
+<td>24.90</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>20.05</td>
+<td>30.30</td>
+<td>36.20</td>
+<td>60.27</td>
+<td>26.85</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>66.75</td>
+<td>70.64</td>
+<td>73.33</td>
+<td>80.60</td>
+<td>21.10</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>59.78</td>
+<td>64.91</td>
+<td>67.68</td>
+<td>77.95</td>
+<td>19.00</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>10.39</td>
+<td>21.30</td>
+<td>30.20</td>
+<td>61.83</td>
+<td>26.25</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>29.68</td>
+<td>39.62</td>
+<td>43.90</td>
+<td>62.87</td>
+<td>27.50</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>18.48</td>
+<td>24.61</td>
+<td>51.89</td>
+<td>22.25</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>0.85</td>
+<td>11.61</td>
+<td>14.06</td>
+<td>31.73</td>
+<td>60.10</td>
+<td>0.23</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>31.16</td>
+<td>40.02</td>
+<td>43.65</td>
+<td>68.16</td>
+<td>27.20</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.09</td>
+<td>12.40</td>
+<td>15.63</td>
+<td>32.66</td>
+<td>54.25</td>
+<td>0.09</td>
+</tr>
+</tbody></table>
+<h3 id="表-10：Writing-Prompts，Llama-3B（完整）"><a href="#表-10：Writing-Prompts，Llama-3B（完整）" class="headerlink" title="表 10：Writing Prompts，Llama 3B（完整）"></a>表 10：Writing Prompts，Llama 3B（完整）</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>10.45</td>
+<td>22.32</td>
+<td>29.59</td>
+<td>60.01</td>
+<td>29.50</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>1.12</td>
+<td>12.18</td>
+<td>18.53</td>
+<td>51.74</td>
+<td>32.00</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>4.66</td>
+<td>16.98</td>
+<td>23.67</td>
+<td>55.70</td>
+<td>27.00</td>
+<td>0.08</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>41.65</td>
+<td>47.65</td>
+<td>53.21</td>
+<td>79.54</td>
+<td>19.00</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>29.35</td>
+<td>37.53</td>
+<td>43.50</td>
+<td>71.27</td>
+<td>21.00</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>42.59</td>
+<td>48.20</td>
+<td>53.44</td>
+<td>77.84</td>
+<td>17.90</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>61.05</td>
+<td>64.72</td>
+<td>68.27</td>
+<td>82.43</td>
+<td>18.75</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>68.96</td>
+<td>72.09</td>
+<td>73.45</td>
+<td>86.12</td>
+<td>18.50</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>9.31</td>
+<td>20.50</td>
+<td>29.60</td>
+<td>63.60</td>
+<td>25.50</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>29.08</td>
+<td>37.91</td>
+<td>43.91</td>
+<td>67.57</td>
+<td>21.75</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>19.71</td>
+<td>26.11</td>
+<td>58.97</td>
+<td>24.15</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>0.82</td>
+<td>11.54</td>
+<td>14.03</td>
+<td>32.96</td>
+<td>57.25</td>
+<td>0.13</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>28.60</td>
+<td>38.13</td>
+<td>42.54</td>
+<td>69.82</td>
+<td>23.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.05</td>
+<td>11.68</td>
+<td>15.10</td>
+<td>34.03</td>
+<td>50.60</td>
+<td>0.09</td>
+</tr>
+</tbody></table>
+<h3 id="表-11：ReedsyPrompts，Llama-8B"><a href="#表-11：ReedsyPrompts，Llama-8B" class="headerlink" title="表 11：ReedsyPrompts，Llama 8B"></a>表 11：ReedsyPrompts，Llama 8B</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>8.96</td>
+<td>21.71</td>
+<td>28.73</td>
+<td>53.61</td>
+<td>22.95</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>1.45</td>
+<td>12.23</td>
+<td>19.15</td>
+<td>52.20</td>
+<td>27.75</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>4.49</td>
+<td>16.90</td>
+<td>24.05</td>
+<td>51.97</td>
+<td>28.75</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>29.83</td>
+<td>39.26</td>
+<td>45.72</td>
+<td>63.11</td>
+<td>21.10</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>8.88</td>
+<td>21.89</td>
+<td>28.45</td>
+<td>54.65</td>
+<td>28.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>14.04</td>
+<td>26.07</td>
+<td>32.90</td>
+<td>57.77</td>
+<td>20.75</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>49.13</td>
+<td>56.86</td>
+<td>60.38</td>
+<td>67.30</td>
+<td>24.85</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>50.81</td>
+<td>58.29</td>
+<td>61.63</td>
+<td>68.98</td>
+<td>20.25</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>9.66</td>
+<td>21.15</td>
+<td>29.67</td>
+<td>62.08</td>
+<td>29.90</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>17.29</td>
+<td>28.94</td>
+<td>35.05</td>
+<td>53.30</td>
+<td>27.00</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>18.48</td>
+<td>24.61</td>
+<td>51.89</td>
+<td>22.25</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>1.00</td>
+<td>11.93</td>
+<td>15.71</td>
+<td>35.05</td>
+<td>58.30</td>
+<td>0.08</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>32.14</td>
+<td>41.04</td>
+<td>45.59</td>
+<td>70.56</td>
+<td>24.15</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.19</td>
+<td>12.53</td>
+<td>16.94</td>
+<td>35.73</td>
+<td>58.60</td>
+<td>0.10</td>
+</tr>
+</tbody></table>
+<h3 id="表-12：Writing-Prompts，Llama-8B"><a href="#表-12：Writing-Prompts，Llama-8B" class="headerlink" title="表 12：Writing Prompts，Llama 8B"></a>表 12：Writing Prompts，Llama 8B</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>11.88</td>
+<td>23.82</td>
+<td>30.55</td>
+<td>63.89</td>
+<td>25.35</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>1.69</td>
+<td>12.68</td>
+<td>19.36</td>
+<td>55.48</td>
+<td>27.00</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>21.76</td>
+<td>32.18</td>
+<td>38.47</td>
+<td>68.25</td>
+<td>22.50</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>32.39</td>
+<td>46.06</td>
+<td>51.93</td>
+<td>75.99</td>
+<td>21.50</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>14.64</td>
+<td>25.71</td>
+<td>33.28</td>
+<td>65.24</td>
+<td>23.75</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>17.80</td>
+<td>28.65</td>
+<td>35.61</td>
+<td>67.99</td>
+<td>21.25</td>
+<td>0.07</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>64.48</td>
+<td>68.59</td>
+<td>71.30</td>
+<td>78.95</td>
+<td>17.75</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>65.76</td>
+<td>68.93</td>
+<td>72.48</td>
+<td>82.56</td>
+<td>20.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>10.21</td>
+<td>21.60</td>
+<td>30.35</td>
+<td>65.40</td>
+<td>23.80</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>31.45</td>
+<td>42.18</td>
+<td>47.56</td>
+<td>70.16</td>
+<td>22.00</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>18.48</td>
+<td>24.61</td>
+<td>51.89</td>
+<td>22.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>0.98</td>
+<td>12.09</td>
+<td>15.76</td>
+<td>39.77</td>
+<td>49.15</td>
+<td>0.07</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>35.58</td>
+<td>43.69</td>
+<td>48.02</td>
+<td>75.59</td>
+<td>20.65</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.25</td>
+<td>12.15</td>
+<td>16.50</td>
+<td>38.05</td>
+<td>49.00</td>
+<td>0.07</td>
+</tr>
+</tbody></table>
+<h3 id="表-13：ReedsyPrompts，Qwen-7B"><a href="#表-13：ReedsyPrompts，Qwen-7B" class="headerlink" title="表 13：ReedsyPrompts，Qwen 7B"></a>表 13：ReedsyPrompts，Qwen 7B</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>2.89</td>
+<td>14.69</td>
+<td>20.12</td>
+<td>49.66</td>
+<td>30.75</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>2.00</td>
+<td>13.75</td>
+<td>19.88</td>
+<td>51.91</td>
+<td>27.75</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>6.77</td>
+<td>17.96</td>
+<td>24.34</td>
+<td>52.50</td>
+<td>29.35</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>3.64</td>
+<td>41.47</td>
+<td>47.06</td>
+<td>52.52</td>
+<td>25.75</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>19.21</td>
+<td>32.01</td>
+<td>36.74</td>
+<td>63.94</td>
+<td>22.85</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>14.54</td>
+<td>28.40</td>
+<td>33.26</td>
+<td>61.97</td>
+<td>25.90</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>76.32</td>
+<td>81.64</td>
+<td>82.14</td>
+<td>84.39</td>
+<td>14.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>70.98</td>
+<td>76.83</td>
+<td>77.86</td>
+<td>81.86</td>
+<td>16.00</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>7.87</td>
+<td>20.29</td>
+<td>28.37</td>
+<td>58.22</td>
+<td>30.50</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>3.57</td>
+<td>18.48</td>
+<td>24.61</td>
+<td>51.89</td>
+<td>22.25</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>0.70</td>
+<td>10.07</td>
+<td>10.67</td>
+<td>30.37</td>
+<td>63.75</td>
+<td>0.19</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>16.75</td>
+<td>28.67</td>
+<td>33.60</td>
+<td>57.50</td>
+<td>24.15</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.59</td>
+<td>12.40</td>
+<td>15.63</td>
+<td>35.13</td>
+<td>54.25</td>
+<td>0.09</td>
+</tr>
+</tbody></table>
+<h3 id="表-14：Writing-Prompts，Qwen-7B"><a href="#表-14：Writing-Prompts，Qwen-7B" class="headerlink" title="表 14：Writing Prompts，Qwen 7B"></a>表 14：Writing Prompts，Qwen 7B</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>BLEU(↓)</th>
+<th>ROUGE-L(↓)</th>
+<th>METEOR(↓)</th>
+<th>Sent-Sim(↓)</th>
+<th>LLMScore(↑)</th>
+<th>Degen(↓)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naive</td>
+<td>6.08</td>
+<td>18.34</td>
+<td>23.78</td>
+<td>56.14</td>
+<td>24.75</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>3.05</td>
+<td>15.27</td>
+<td>21.44</td>
+<td>55.98</td>
+<td>23.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Top-p</td>
+<td>18.44</td>
+<td>30.91</td>
+<td>35.70</td>
+<td>65.52</td>
+<td>24.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Typical</td>
+<td>5.51</td>
+<td>17.12</td>
+<td>23.21</td>
+<td>55.74</td>
+<td>26.00</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>Mirostat</td>
+<td>26.32</td>
+<td>38.59</td>
+<td>43.11</td>
+<td>71.10</td>
+<td>20.50</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Min-p</td>
+<td>29.05</td>
+<td>41.20</td>
+<td>45.00</td>
+<td>73.36</td>
+<td>23.25</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>83.32</td>
+<td>87.27</td>
+<td>87.75</td>
+<td>87.66</td>
+<td>14.25</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>ACS</td>
+<td>77.46</td>
+<td>82.98</td>
+<td>83.03</td>
+<td>84.68</td>
+<td>17.25</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>9.35</td>
+<td>21.83</td>
+<td>29.97</td>
+<td>63.61</td>
+<td>25.00</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>31.45</td>
+<td>42.18</td>
+<td>47.56</td>
+<td>70.16</td>
+<td>22.00</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>4.67</td>
+<td>19.71</td>
+<td>26.11</td>
+<td>58.97</td>
+<td>24.15</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>OursCSP</td>
+<td>1.30</td>
+<td>12.20</td>
+<td>13.37</td>
+<td>36.18</td>
+<td>48.00</td>
+<td>0.13</td>
+</tr>
+<tr>
+<td>OursNSP</td>
+<td>20.61</td>
+<td>32.27</td>
+<td>36.92</td>
+<td>66.77</td>
+<td>24.60</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Ours</td>
+<td>1.63</td>
+<td>12.08</td>
+<td>14.93</td>
+<td>37.40</td>
+<td>49.25</td>
+<td>0.06</td>
+</tr>
+</tbody></table>
+<h2 id="图-7：用于严格退化评估的提示与评分标准"><a href="#图-7：用于严格退化评估的提示与评分标准" class="headerlink" title="图 7：用于严格退化评估的提示与评分标准"></a>图 7：用于严格退化评估的提示与评分标准</h2><p>你是一名严格的文本退化评估者。<br>你将收到一段文本。你的任务是评估它是否表现出 LLM 退化的迹象。<br>仅返回有效的 JSON，包含：</p>
+<ul>
+<li>“degeneration_score”：[0.0, 1.0] 之间的浮点数</li>
+<li>“label”：”OK” 或 “DEGENERATED”（阈值：0.30）</li>
+<li>“issues”：最多 4 个要点式字符串的列表，解释关键问题（如有）</li>
+</ul>
+<p>使用以下评分标准。4 个维度各占同等权重（每个 0.25）计入最终得分。<br>– 1. 句法完整性（语法和句子结构）</p>
+<ul>
+<li>0.0 &#x3D; 语法无瑕、标点合乎逻辑、句子完整</li>
+<li>0.2–0.4 &#x3D; 轻微的连写句或别扭的措辞</li>
+<li>0.6–0.8 &#x3D; 频繁的结构错误或令人困惑的句法</li>
+<li>1.0 &#x3D; 破碎或混乱的句子结构<br>如果语法正确，不要惩罚复杂或诗歌式的句子结构。<br>– 2. 语义轨迹（逻辑与主题连贯性）</li>
+<li>0.0 &#x3D; 思路清晰、合乎逻辑地展开</li>
+<li>0.2–0.4 &#x3D; 一些松散的过渡或意外的插入</li>
+<li>0.6–0.8 &#x3D; 句子之间的思路流断裂</li>
+<li>1.0 &#x3D; 没有连贯的信息或推进<br>如果意义得以保留，不要惩罚元小说式评论或风格化离题。<br>– 3. 词汇合理性（选词与语境适当性）</li>
+<li>0.0 &#x3D; 所有词都与语气和意义匹配</li>
+<li>0.2–0.4 &#x3D; 一些不寻常的选词但可理解</li>
+<li>0.6–0.8 &#x3D; 奇怪的措辞、语气不匹配、罕见的词组搭配</li>
+<li>1.0 &#x3D; 荒谬或超现实的词组搭配（如 “fractional nut satisfaction”）<br>如果是刻意使用，不要惩罚诗歌式、古语式或风格化语言。<br>– 4. 噪声症状（重复、冗长啰嗦、词句混乱）</li>
+<li>0.0 &#x3D; 没有异常模式</li>
+<li>0.2–0.4 &#x3D; 轻微的风格重复或啰嗦</li>
+<li>0.6–0.8 &#x3D; 令人分心的重复、填充语或随机性</li>
+<li>1.0 &#x3D; 失控生成的明显迹象：词元循环、幻觉、胡言乱语<br>切勿因段落最后一句被截断而惩罚——这是长度限制造成的。<br>重要：</li>
+<li>运用专业判断来应用这些分数。</li>
+<li>专注于检测真正的退化（例如逻辑断裂、胡言乱语、幻觉文本）。</li>
+<li>除 JSON 对象外绝不返回任何内容。不要额外的解释或评论。</li>
+</ul>
+<h2 id="图-8：用于衡量文本多样性的提示与评估评分标准"><a href="#图-8：用于衡量文本多样性的提示与评估评分标准" class="headerlink" title="图 8：用于衡量文本多样性的提示与评估评分标准"></a>图 8：用于衡量文本多样性的提示与评估评分标准</h2><p>你是一名文本多样性评估者。<br>下面是 15 个编号的文本样本。你的任务是评估它们在视角、风格、情节结构和语言变化方面的多样性。<br>你的输出必须是一个 JSON 对象，包含：</p>
+<ul>
+<li>“diversity_score”：0.0 到 1.0 之间的浮点数（其中 0 &#x3D; 所有样本几乎相同，1 &#x3D; 样本最大限度多样化）</li>
+<li>“justification”：一句话解释你的推理<br>评分指引：</li>
+<li>0.0：所有样本在结构和语义上几乎完全相同。</li>
+<li>0.1–0.3：措辞或细节略有变化，但大多遵循同一模板。</li>
+<li>0.4–0.6：在视角、语气、场景或内容发展上有显著变化。</li>
+<li>0.7–0.9：在叙事框架、想象力细节或体裁转变上有实质性差异。</li>
+<li>1.0：样本在形式、功能和语声上最大限度不同。<br>当角色、场景或文学手法的微小变化出现时，请宽容对待。如果表层特征存在有意义的差异，不要惩罚共享主题。<br>只返回一个有效的 JSON 对象，不要其他任何内容。</li>
+</ul>
+<h2 id="图-9：带显式负约束的条件故事生成提示"><a href="#图-9：带显式负约束的条件故事生成提示" class="headerlink" title="图 9：带显式负约束的条件故事生成提示"></a>图 9：带显式负约束的条件故事生成提示</h2><p>你是一个乐于助人且富有创造力的助手，始终用英语回复，并避免不想要的回复。<br>请根据以下提示写一个故事。<br>不要生成与以下示例相似的回答：<br>{all_previous_outputs}</p>
+<h1 id="《Avoidance-Decoding-for-Diverse-Multi-Branch-Story-Generation》逐段翻译解析"><a href="#《Avoidance-Decoding-for-Diverse-Multi-Branch-Story-Generation》逐段翻译解析" class="headerlink" title="《Avoidance Decoding for Diverse Multi-Branch Story Generation》逐段翻译解析"></a>《Avoidance Decoding for Diverse Multi-Branch Story Generation》逐段翻译解析</h1><blockquote>
+<p>论文出处：Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing（EMNLP 2025），第 7489–7505 页，2025 年 11 月 4–9 日，©2025 Association for Computational Linguistics</p>
+<p>作者：Kyeongman Park（<a href="mailto:&#122;&#x7a;&#97;&#x6e;&#x67;&#x6d;&#97;&#x6e;&#x65;&#64;&#115;&#110;&#x75;&#46;&#97;&#x63;&#x2e;&#107;&#114;">zzangmane@snu.ac.kr</a>）、Nakyeong Yang（<a href="mailto:&#x79;&#x6e;&#x79;&#48;&#x35;&#x30;&#x36;&#64;&#115;&#110;&#x75;&#x2e;&#97;&#99;&#46;&#107;&#x72;">yny0506@snu.ac.kr</a>）、Kyomin Jung（<a href="mailto:&#x6b;&#106;&#117;&#x6e;&#103;&#x40;&#x73;&#110;&#x75;&#x2e;&#x61;&#99;&#x2e;&#x6b;&#114;">kjung@snu.ac.kr</a>）——首尔国立大学（Seoul National University）</p>
+</blockquote>
+<hr>
+<h2 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h2><p><strong>Avoidance Decoding for Diverse Multi-Branch Story Generation</strong><br>用于多样化多分支故事生成的”回避解码”（Avoidance Decoding）</p>
+<hr>
+<h2 id="摘要（Abstract）"><a href="#摘要（Abstract）" class="headerlink" title="摘要（Abstract）"></a>摘要（Abstract）</h2><p>大语言模型（LLM）在给定相同输入提示时，往往会产生重复、单调的输出，尤其是在故事生成这类任务中，原因是模型在相同输入下的创造性多样性有限。为解决这一挑战，本文提出一种新的解码策略——回避解码（Avoidance Decoding）：它通过惩罚与先前已生成输出之间的相似性来修改 token 的逻辑值（logits），从而鼓励生成更多样化的多分支故事。这一惩罚自适应地平衡两种相似性度量：(1) <strong>概念级相似性惩罚（Concept-level Similarity Penalty，CSP）</strong>——在生成早期阶段优先使用，以多样化初始的故事概念；(2) <strong>叙事级相似性惩罚（Narrative-level Similarity Penalty，NSP）</strong>——在后期逐步加强，以确保情节发展既自然又多样。值得注意的是，与强基线相比，本文方法将输出多样性最高提升 2.6 倍，平均降低 30% 的重复率，同时有效缓解了文本退化（text degeneration）。此外，本文揭示该方法激活了范围更广的神经元，表明它调动了模型的内在创造力。</p>
+<hr>
+<h2 id="1-引言（Introduction）"><a href="#1-引言（Introduction）" class="headerlink" title="1 引言（Introduction）"></a>1 引言（Introduction）</h2><p><strong>第 1 段</strong>：人类作家能从同样的想法中写出完全不同的文本；然而，大语言模型在写作创造力上仍难以达到人类水平。此前研究发现，即便最先进的模型（如 GPT-4o）也会产生重复、单调的模式（Zhang et al., 2025; Wu et al., 2025a; Wenger and Kenett, 2025; Lagzian et al., 2025）。这一倾向限制了 LLM 在需要概念多样性和广泛探索的任务上的表现，例如故事生成（Park et al., 2024a; Materzok, 2025; Huang et al., 2024）和复杂推理（Wang et al., 2024; Sun et al., 2025; Kirk et al., 2023; Wu et al., 2025b）。尤其是在故事生成中，该任务带来一个独特挑战：它必须通过富有创意的想法和叙事来吸引读者，因此在用 LLM 生成故事时确保多样性至关重要。</p>
+<p><strong>图 1 说明</strong>：回避解码通过惩罚与先前生成故事的相似性来抑制重复。高亮文本展示了由”基于相似性的对比惩罚”（Similarity-based Contrastive Penalty）在故事中引发的最强对比之处。红色下划线标记主要施加概念级相似性惩罚（CSP）的前部区域；蓝色下划线标记主要施加叙事级相似性惩罚（NSP）的后部区域。</p>
+<p><strong>第 2 段</strong>：已有研究尝试通过解码时（decoding-time）的方法提高生成文本的多样性（Welleck et al., 2019; Holtzman et al., 2019; Nguyen et al., 2024; Vijayakumar et al., 2016）。但它们未能实现充分的多样性，因为这些方法只引入了表层的 token 级变化，没有丰富概念层面、语境层面或叙事层面的多样性。此外，由于多样性与流畅性之间存在尚未解决的权衡，这些方法还出现了文本退化（Su et al., 2022; Arias et al., 2024）。</p>
+<p><strong>第 3 段</strong>：为解决上述局限，本文提出一种新的解码策略——回避解码。该方法引入一种新的”基于相似性的对比惩罚”：在每一步解码时，通过惩罚当前输出与多条先前生成的故事（它们充当负样本，negative samples）之间的相似性来修改模型逻辑值。由此，在给定单一输入提示时，本方法能大幅提升多分支故事的多样性。具体而言，该对比惩罚是两种不同惩罚的混合：概念级相似性惩罚（CSP）和叙事级相似性惩罚（NSP）。其一，CSP 通过计算候选 token 的隐藏状态与负样本之间的相似度来多样化初始概念表示；其二，NSP 通过计算已生成输出的句子嵌入与负样本之间的相似度来确保整体的叙事多样性。本文在早期阶段赋予 CSP 更高权重，以确保多样化的故事规划；并随当前输出长度的增加逐步把重心转向 NSP，以确保情节推进自然而又多样；最终将加权和作为惩罚施加。</p>
+<p><strong>第 4 段</strong>：结果上，在无需任何额外训练或随机采样的前提下，按基于 LLM 的多样性评估，本方法实现的多样性最高达到最佳基线的 2.6 倍；在 BLEU（Papineni et al., 2002）、ROUGE-L（Lin, 2004）、METEOR（Banerjee and Lavie, 2005）和句子相似度（Reimers and Gurevych, 2019）等自动指标上，重复率比基线平均至少降低 30%，同时保持对文本退化的鲁棒性。此外，本文揭示该方法在迭代式多分支故事生成过程中激活了范围更广的神经元，说明它利用的是模型内在的创造能力，而不仅仅是引入表层的 token 级变化。</p>
+<hr>
+<h2 id="2-相关工作（Related-Works）"><a href="#2-相关工作（Related-Works）" class="headerlink" title="2 相关工作（Related Works）"></a>2 相关工作（Related Works）</h2><h3 id="2-1-LLM-解码策略（LLM-Decoding-Strategies）"><a href="#2-1-LLM-解码策略（LLM-Decoding-Strategies）" class="headerlink" title="2.1 LLM 解码策略（LLM Decoding Strategies）"></a>2.1 LLM 解码策略（LLM Decoding Strategies）</h3><p>针对大语言模型存在各种解码策略：有些致力于促进多样性（Welleck et al., 2019; Holtzman et al., 2019; Fan et al., 2018; Vijayakumar et al., 2016; Nguyen et al., 2024; Zhu et al., 2023），有些致力于提高可靠性（Hokamp and Liu, 2017; Wang et al., 2022; Chuang et al., 2023; Guo et al., 2025; Kim et al., 2025），还有些致力于实现更流畅、更高质量的生成（Meister et al., 2023; Su et al., 2022; Li et al., 2022; Arias et al., 2024）。本文采用对比式（contrastive-style）解码策略来增强生成过程中的多样性（Su et al., 2022; Welleck et al., 2019; Arias et al., 2024; Li et al., 2022）；但与先前工作”降低与已生成 token 的 token 级相似性”不同，本文通过惩罚与每一条先前生成输出的相似性，来增加多分支样本之间的语境级（context-level）多样性。</p>
+<h3 id="2-2-多样化故事生成（Diverse-Story-Generation）"><a href="#2-2-多样化故事生成（Diverse-Story-Generation）" class="headerlink" title="2.2 多样化故事生成（Diverse Story Generation）"></a>2.2 多样化故事生成（Diverse Story Generation）</h3><p>已有多种方法用于提升故事生成的多样性与创造力（Park et al., 2024a; Patel et al., 2024; Fan et al., 2018; Bae and Kim, 2024; Materzok, 2025; Vijayakumar et al., 2016）。一些方法从单一提示出发以树状结构生成多样化的故事分支，从而增强创造性与吸引力（Materzok, 2025; Wen et al., 2023; Nottingham et al., 2024; Jaschek et al., 2019; Alabdulkarim et al., 2021）。另一些方法则引入交互式故事生成，在关键决策点进行”人在回路”的分支选择（Huang et al., 2024; Ghaffari and Hokamp, 2025）。据本文所知，目前尚没有方法在多分支故事生成的解码阶段（decoding time）增强多样性——这正是本文工作的重点。</p>
+<hr>
+<h2 id="3-问题定义（Problem-Definition）"><a href="#3-问题定义（Problem-Definition）" class="headerlink" title="3 问题定义（Problem Definition）"></a>3 问题定义（Problem Definition）</h2><p>给定一个代表故事核心概念或初始想法的固定故事提示（prompt），<strong>多分支故事生成</strong>（Multi-Branch Story Generation）专注于并行生成多条连贯、流畅的故事续写，且这些续写在叙事轨迹上彼此多样。设 Pθ 为一个语言模型。给定固定提示 p，记 {x1, …, xn} 为 Pθ 在条件 p 下并行生成的故事集合。每个 xi 通过从分布 Pθ(xi_t | p, xi_1:t−1) 中预测下一个 token 来生成，其中 xi_1:t−1 表示此前已生成的 token。定义成对相似度函数 s : X × X → R，其中 X 表示所有可能生成的故事（如 token 序列）构成的空间，s(xi, xj) 量化两个输出 xi 与 xj 之间的语义或结构相似度（例如 BLEU 或句子相似度）。本任务的目标是：从单一提示 p 出发生成一组语义发散的故事 {x1, …, xn}，即对所有 i ≠ j 最小化 s(xi, xj)，从而在保证对退化鲁棒的同时，确保内容与叙事结构的多样性。</p>
+<hr>
+<h2 id="4-方法（Methodology）"><a href="#4-方法（Methodology）" class="headerlink" title="4 方法（Methodology）"></a>4 方法（Methodology）</h2><p><strong>开头段</strong>：本文引入一种新的解码策略，引导语言模型生成与任何负样本都不相似的输出，同时抵抗退化。本工作中，将”同一输入先前生成的输出”当作负样本，从而在增强多分支故事多样性的同时缓解退化。</p>
+<h3 id="4-1-动机（Motivation）"><a href="#4-1-动机（Motivation）" class="headerlink" title="4.1 动机（Motivation）"></a>4.1 动机（Motivation）</h3><p>作为方法的高层论证，本文给出一个概率论层面的动机，说明为什么用”对负样本的最大相似度惩罚”来对比式地修改 token 逻辑值。假设语言模型为 Pθ(xt|x1:t−1) &#x3D; ∏(j&#x3D;1..t) Pθ(xj|x1:t−1)；设 Ps(N |x1:t) 为”匹配概率”（match probability），用来量化生成文本（追加下一个候选 token 之后）与负样本文本集 N &#x3D; {n1, …, nN} 的相似程度。接着定义 P(xt | x1:t−1, ¬N)：在第 t 步、已知前文 x1:t−1、且明确避开 N 中任何负样本的条件下生成 token x 的概率；以及 Ps(¬N | x1:t)：互补的”匹配-回避概率”，即生成文本 x1:t 与任何负样本 N 都不匹配的概率。理想情况下，该回避概率应计入负样本之间的依赖关系：Ps(¬N | x1:t) &#x3D; ∏(i&#x3D;1..N) (1 − Ps(ni | x1:t, ¬n1:i−1))。这一公式天然地反映了本文的主要目标：生成与任何先前故事（即负样本）都不相似的输出。但实际中，为降低计算成本，将每个条件匹配概率近似为 Ps(ni | x1:t, ¬n1:i−1) ≈ Ps(ni | x1:t)。将其代入乘积并运用贝叶斯规则，得到<strong>公式 (1)</strong>：</p>
+<p>P(xt | x1:t−1, ¬N) &#x3D; Pθ(xt | x1:t−1) · Ps(¬N | x1:t) &#x2F; Ps(¬N | x1:t−1) ∝ Pθ(xt | x1:t−1) · Ps(¬N | x1:t) &#x3D; Pθ(xt | x1:t−1) · ∏(i&#x3D;1..N) (1 − Ps(ni | x1:t))</p>
+<p>由于在对 xt 做优化时 Ps(¬N | x1:t−1) 是常数，于是得到近似<strong>公式 (2)</strong>：</p>
+<p>log P(xt | x1:t−1, ¬N) ≈ log Pθ(xt | x1:t−1) − Σ(i&#x3D;1..N) αi · Ps(ni | x1:t)</p>
+<p>其中每个样本使用缩放的一阶近似 log(1 − p) ≈ −αi·p。因此，对原始 token 逻辑值 ℓt（对应概率 P(xt | p, x&lt;t)）施加惩罚，得到调整后的逻辑值 ℓ*t，即<strong>公式 (3)</strong>：</p>
+<p>ℓ*t &#x3D; ℓt − Σ(i&#x3D;1..N) αi · Ps(ni | x1:t)</p>
+<p>公式 (3) 中基于求和的惩罚考虑全部负证据，类似 L1 型正则化。为防止负样本累积造成过度惩罚，本文把调整后的逻辑值重新定义为 ℓ′t，类似 L∞ 型正则化，即<strong>公式 (4)</strong>：</p>
+<p>ℓ*t &#x3D; ℓt − max(i&#x3D;1..N) αi · Ps(ni | x1:t)</p>
+<p>随后用这些修改后的逻辑值进行贪心解码，即<strong>公式 (5)</strong>：</p>
+<p>x<em>t &#x3D; argmax(v∈V) ℓ</em>t(v)</p>
+<h3 id="4-2-基于相似性的对比惩罚（Similarity-Based-Contrastive-Penalties）"><a href="#4-2-基于相似性的对比惩罚（Similarity-Based-Contrastive-Penalties）" class="headerlink" title="4.2 基于相似性的对比惩罚（Similarity-Based Contrastive Penalties）"></a>4.2 基于相似性的对比惩罚（Similarity-Based Contrastive Penalties）</h3><p>匹配概率 Ps(N |x1:t) 对应先前工作——对比搜索（Contrastive Search，Su et al., 2022）——中的退化惩罚。先前工作把退化惩罚定义为候选 token xt 的隐藏状态与前文 token x1:t−1 的隐藏状态之间的最大余弦相似度。本文扩展了这一概率，目标是降低”目标输出”与”多个负样本”之间的相似度；此外还设计了同时考虑与这些样本的概念级和叙事级相似性的新惩罚项。</p>
+<h4 id="4-2-1-概念级相似性惩罚（Concept-level-Similarity-Penalty，CSP）"><a href="#4-2-1-概念级相似性惩罚（Concept-level-Similarity-Penalty，CSP）" class="headerlink" title="4.2.1 概念级相似性惩罚（Concept-level Similarity Penalty，CSP）"></a>4.2.1 概念级相似性惩罚（Concept-level Similarity Penalty，CSP）</h4><p>本文首先提出 CSP，用于多样化故事的概念表示。具体做法：把候选 token 的最后一层隐藏表示与负样本中所有单个 token 的隐藏表示之间的<strong>最大余弦相似度</strong>作为 CSP。形式化为<strong>公式 (6)</strong>：</p>
+<p>sCSP_j &#x3D; max(h′∈H−) cos(hj, h′)</p>
+<p>其中 hj 是第 j 个候选 token 的最后一层隐藏状态，H− 表示负样本中所有 token 的隐藏状态集合。该惩罚主要促进低层概念空间的多样性，而这会显著影响故事规划的多样性。</p>
+<h4 id="4-2-2-叙事级相似性惩罚（Narrative-level-Similarity-Penalty，NSP）"><a href="#4-2-2-叙事级相似性惩罚（Narrative-level-Similarity-Penalty，NSP）" class="headerlink" title="4.2.2 叙事级相似性惩罚（Narrative-level Similarity Penalty，NSP）"></a>4.2.2 叙事级相似性惩罚（Narrative-level Similarity Penalty，NSP）</h4><p>然而，仅应用 CSP 可能损害故事整体的连贯性和自然度，因为它直接扰动了表示，尤其在长文本生成的后期阶段。因此，本文额外提出 NSP，以鼓励在叙事层面与负样本区分开来。NSP 的计算方式：用 Sentence-BERT 计算”当前输出句（追加候选 token 之后）的嵌入”与”每个负样本”之间的余弦相似度。形式化为<strong>公式 (7)</strong>：</p>
+<p>sNSP_j &#x3D; cos(E(y1:t ⊕ wj), E(x−))</p>
+<p>其中 E(·) 表示 Sentence-BERT 嵌入函数，y1:t ⊕ wj 是追加候选 token wj 之后的当前输出句，x− 是负样本句。该惩罚在不损害故事连贯性与自然度的前提下，通过降低更高层语境上的语义相似度，显著增强情节多样性。</p>
+<h4 id="4-2-3-概念到叙事的混合惩罚（Concept-to-Narrative-Hybrid-Penalty）"><a href="#4-2-3-概念到叙事的混合惩罚（Concept-to-Narrative-Hybrid-Penalty）" class="headerlink" title="4.2.3 概念到叙事的混合惩罚（Concept-to-Narrative Hybrid Penalty）"></a>4.2.3 概念到叙事的混合惩罚（Concept-to-Narrative Hybrid Penalty）</h4><p>不过在生成早期，输出尚未形成有意义的句子长度时，NSP 往往太小而无效。因此，本文把概念级与叙事级相似性惩罚整合为一种混合形式。具体地，在解码步数到达拐点 T0 之前的早期阶段主要依靠 CSP，以确保多样化的故事规划；随后逐步提高 NSP 的权重，以保证生成故事的连贯性与自然度。混合比例 γ 定义为<strong>公式 (8)</strong>：</p>
+<p>γ &#x3D; δ + (1 − δ) · sigmoid(t − T0)</p>
+<p>其中 δ 表示赋予 CSP 的最小权重。于是”概念到叙事混合惩罚”计算为<strong>公式 (9)</strong>：</p>
+<p>shybrid_j &#x3D; γ · sCSP_j + (1 − γ) · sNSP_j</p>
+<p>在把候选 token wj 追加到已生成文本 x1:t−1 之后，shybrid_j 这一项即对应公式 (4) 中的匹配概率 Ps(ni | x1:t)。</p>
+<h3 id="4-3-整体解码流程（Overall-Decoding-Procedure）"><a href="#4-3-整体解码流程（Overall-Decoding-Procedure）" class="headerlink" title="4.3 整体解码流程（Overall Decoding Procedure）"></a>4.3 整体解码流程（Overall Decoding Procedure）</h3><p>如算法 1 所示：首先按先前研究（Arias et al., 2024）的流程计算候选 token 数 k 与自适应惩罚权重 αACS；接着应用公式 (8) 和 (9)，针对每个负样本计算每个候选 token 的惩罚，乘以常数超参数 β 进行缩放，并在所有负样本间取最大值；最后，把逻辑值概率 pt(wj) 与惩罚项 sfinal_j 以权重 αACS 组合，得到每个候选的最终得分 Fj，再通过贪心解码选出得分最高的 token。</p>
+<p><strong>算法 1（回避解码）逐行说明</strong>：</p>
+<ul>
+<li>输入：pt（模型逻辑值）、y1:t（已生成 token）、{x−i}(i&#x3D;1..N)（N 条负样本文本）、{H−i}(i&#x3D;1..N)（负样本隐藏状态）</li>
+<li>第 1 步：计算 k 和 αACS（沿用 Arias et al., 2024 的做法）</li>
+<li>第 2 步：从 pt 中选出 top-k 个候选 token {wj}(j&#x3D;1..k)</li>
+<li>第 3 步：计算 γ &#x3D; δ + (1 − δ) · sigmoid(t − T0)</li>
+<li>第 4 步：对每个候选 j &#x3D; 1..k：<ul>
+<li>hj ← 模型在 (wj | y1:t) 下的最后一层隐藏状态</li>
+<li>对每个负样本 i &#x3D; 1..N：<ul>
+<li>sCSP_j[i] ← max(h′∈H−i) cos(hj, h′)</li>
+<li>sNSP_j[i] ← cos(E(y1:t ⊕ wj), E(x−i))</li>
+<li>shybrid_j[i] ← γ · sCSP_j[i] + (1 − γ) · sNSP_j[i]</li>
+</ul>
+</li>
+<li>sfinal_j ← max(i) β · shybrid_j[i]</li>
+<li>Fj ← (1 − αACS) · pt(wj) − αACS · sfinal_j</li>
+</ul>
+</li>
+<li>返回：w* ← argmax(j) Fj</li>
+<li>附注：H−i 是第 i 个负样本中所有单个 token 的最后一层隐藏状态集合。</li>
+</ul>
+<hr>
+<h2 id="5-实验（Experiments）"><a href="#5-实验（Experiments）" class="headerlink" title="5 实验（Experiments）"></a>5 实验（Experiments）</h2><h3 id="5-1-实验设置（Experimental-Setup）"><a href="#5-1-实验设置（Experimental-Setup）" class="headerlink" title="5.1 实验设置（Experimental Setup）"></a>5.1 实验设置（Experimental Setup）</h3><p><strong>实现细节</strong>：所有解码流程在两块 NVIDIA RTX A5000 GPU 上运行。为加速逐 token 的迭代生成，复用了上一解码步中注意力模块缓存的 KV 值。从 ReedsyPrompts（Park et al., 2024b）和 WritingPrompts（Fan et al., 2018）中收集了 20 个多样化的故事提示（每个提示至少有 20 个不同的人类写就的故事），作为初始输入。常数标量超参数 β 设为 2.0（使惩罚对 token 逻辑值产生有意义的影响），δ 设为 0.5（在整个生成过程中保持足够的低层多样性），两者基于经验调参（见附录 J）。</p>
+<p><strong>基线（Baselines）</strong>，与以下强基线对比：</p>
+<ul>
+<li><strong>Naive、Top-k、Top-p、Typical、Mirostat、Min-P 采样</strong>（Holtzman et al., 2019; Meister et al., 2023; Basu et al., 2020; Nguyen et al., 2024）：这些是各种能增强多样性的随机解码策略。注意：Naive 采样除了调整温度之外不采用任何特殊技巧。</li>
+<li><strong>对比搜索（CS）与自适应对比搜索（ACS）</strong>：纳入原始对比搜索及其升级版自适应对比搜索作为基线；这些方法是本文方法的主要动机来源。</li>
+<li><strong>多样化束搜索（DBS）</strong>（Vijayakumar et al., 2016）：束组（beam group）数量设为候选句子数，以最大化多样性。</li>
+<li><strong>GPT-4o</strong>：纳入 OpenAI 强大的语言模型 GPT-4o 作为强基线。</li>
+<li><strong>OursCSP 与 OursNSP</strong>：为证明混合惩罚的有效性，纳入两个消融版本作为基线。OursCSP 仅用 CSP 作惩罚，OursNSP 仅用 NSP 作惩罚。注意 OursCSP 高度借鉴先前工作（CS）的公式，但融入了本文自己的调整。</li>
+</ul>
+<p>对除消融版本（OursCSP、OursNSP）之外的所有基线：把同一故事提示下先前生成的所有输出都回馈到下一次输入中，并指示模型”创作一个与任何已生成输出都不相似的故事”（详见附录 G）。相比之下，所有 Ours 变体在同一故事提示内的每次迭代都收到完全相同的指令，而在内部把所有已生成输出存入”负样本记忆”（Negative Examples memory），并从中计算最大隐藏状态相似度和句子相似度。</p>
+<h3 id="5-2-主要实验结果（Main-Experiment-Results）"><a href="#5-2-主要实验结果（Main-Experiment-Results）" class="headerlink" title="5.2 主要实验结果（Main Experiment Results）"></a>5.2 主要实验结果（Main Experiment Results）</h3><h4 id="5-2-1-自动评估指标（Automatic-Evaluation-Metrics）"><a href="#5-2-1-自动评估指标（Automatic-Evaluation-Metrics）" class="headerlink" title="5.2.1 自动评估指标（Automatic Evaluation Metrics）"></a>5.2.1 自动评估指标（Automatic Evaluation Metrics）</h4><p>用标准自动评估指标评估各基线。具体做法：先对每个提示生成的所有故事计算彼此间的平均相似度，再对所有提示取平均得到最终得分。指标包括：</p>
+<ul>
+<li><strong>BLEU、ROUGE-L、METEOR</strong>：利用这些 n-gram 或 unigram 匹配指标作为主要多样性指标。</li>
+<li><strong>Sent-sim</strong>：为量化语义相似度，先用 Sentence-BERT 把生成输出转成嵌入向量，再计算这些向量的两两余弦相似度。</li>
+<li><strong>LLM-Score</strong>：用 OpenAI 新公布的强推理模型 GPT-o4-mini（OpenAI, 2025）直接评估同一故事提示下多条生成输出的多样性（细则见附录 F）。</li>
+<li><strong>Degen</strong>：同样用 GPT-o4-mini，按 0–1 分评估每条生成输出的退化程度。细则包含四个等权维度：”句法完整性（0.25）”、”语义轨迹（0.25）”、”词汇合理性（0.25）”、”噪声症状（0.25）”（细则见附录 E）。</li>
+</ul>
+<h4 id="5-2-2-多样性与退化的定量分析（Quantitative-Analysis-of-Diversity-and-Degeneration）"><a href="#5-2-2-多样性与退化的定量分析（Quantitative-Analysis-of-Diversity-and-Degeneration）" class="headerlink" title="5.2.2 多样性与退化的定量分析（Quantitative Analysis of Diversity and Degeneration）"></a>5.2.2 多样性与退化的定量分析（Quantitative Analysis of Diversity and Degeneration）</h4><p>在三个温度值（低 0.7、中 1.0、高 1.3）、四个广泛使用的 LLM（Mistral 7B、Llama 3B、Llama 8B、Qwen 7B）以及两个含明确故事提示的数据集（ReedsyPrompts、WritingPrompts）上运行本文方法与所有基线。对每个提示生成 15 条多分支故事，每条 200 token，然后评估多样性与退化指标。报告时，选择三个温度中”平均退化分 ≤ 0.1 的样本数最多”的那个温度——因为经验观察到退化分一旦超过 0.1，性能会急剧下降；若某模型在全部温度设置下平均退化分都超过 0.1，则报告其最低温度设置下的结果。因篇幅所限，本节只展示 Mistral-7B 的完整结果与 LLaMA-3B 的前 8 名结果，更全面的结果见附录 D。</p>
+<p><strong>表格 1–4 的解读</strong>（Table 1：ReedsyPrompts + Mistral 7B；Table 2：WritingPrompts + Mistral 7B；Table 3：ReedsyPrompts + Llama 3B；Table 4：WritingPrompts + Llama 3B；每列指标为 BLEU↓、RougeL↓、METEOR↓、Sent-Sim↓、LLMScore↑、Degen↓）：本文模型在大多数指标上取得最佳表现。虽然 OursCSP 多样性更高，但不算最佳模型，因为它在所有温度设置下退化率都超过可接受的 0.1 阈值；OursNSP 虽然没有退化样本，但整体多样性偏低。这说明本文的混合惩罚实现了有效平衡：与现有基线相比显著增强多样性，同时比仅用 CSP 的版本对退化更鲁棒。</p>
+<p><strong>下一段（解释 CS&#x2F;ACS 分数异常的原因）</strong>：另外，CS 与 ACS 的多样性显著偏低，可能源于”把先前生成的故事不断累积进输入提示作为负样本”这种修改指令的做法——它使语言模型对跨故事间甚至完全相同的 token 都表示出不同的隐藏状态，于是即使当前候选 token 与负样本中的 token 相同，二者的余弦相似度也变小。与之相对，本文方法在各分支间使用完全相同的指令，保证相同 token 产生相同的隐藏状态，从而能对每个位置施加准确的惩罚。</p>
+<h4 id="5-2-3-人工评估（Human-Evaluation）"><a href="#5-2-3-人工评估（Human-Evaluation）" class="headerlink" title="5.2.3 人工评估（Human Evaluation）"></a>5.2.3 人工评估（Human Evaluation）</h4><p>招募 7 名人工标注者，按 5 点李克特量表，依据四项标准对每个模型的输出评分：</p>
+<ul>
+<li><strong>多样性（Diversity）</strong>：每个故事在多大程度上与其他故事根本不同，而不仅是角色名或主题名的简单替换。</li>
+<li><strong>退化（Degeneration）</strong>：文本在不崩溃的前提下保持语法正确与词汇连贯的程度。</li>
+<li><strong>创造力（Creativity）</strong>：生成故事的整体原创性与吸引力。</li>
+</ul>
+<p>标注者只评估每组中最后 5 条输出（样本 11–15），因为它们在多样性上差异最明显。更多细节见附录 C、I。</p>
+<p><strong>表 6 解读</strong>（Human evaluation scores，各方法在 Diversity↑&#x2F;Creativity↑&#x2F;Degen↑ 上的均值±标准差）：本文模型在多样性和创造力两个维度上都拿到人工标注者的最高分，证明基于相似性的对比惩罚能有效增强叙事丰富性；同时在退化维度上优于 OursCSP，说明概念到叙事混合惩罚对退化具有更强的鲁棒性。这些结果与 5.2.2 节的定量分析一致，进一步增加了可靠性。</p>
+<h4 id="5-2-4-超参数搜索：T0（Hyper-parameter-Search-T0）"><a href="#5-2-4-超参数搜索：T0（Hyper-parameter-Search-T0）" class="headerlink" title="5.2.4 超参数搜索：T0（Hyper-parameter Search: T0）"></a>5.2.4 超参数搜索：T0（Hyper-parameter Search: T0）</h4><p>用 Llama-3.1-8B，把拐点超参数 T0（公式 8）从 5 到 100 变化，以在多样性与文本退化之间寻找最佳取值；总生成长度固定为 200 token。如图 2 所示，T0 越大，LLMScore 与退化分都趋于上升，趋势线斜率分别为 0.0012 和 0.0014。权衡之后选 T0 &#x3D; 25 为最优设置，因为它在”退化 ≤ 0.1”的输出中带来最高的多样性。</p>
+<h4 id="5-2-5-最大-token-数的影响（Impact-of-Maximum-Token）"><a href="#5-2-5-最大-token-数的影响（Impact-of-Maximum-Token）" class="headerlink" title="5.2.5 最大 token 数的影响（Impact of Maximum Token）"></a>5.2.5 最大 token 数的影响（Impact of Maximum Token）</h4><p>用 Llama-3.2-3B 观察各模型退化分随最大 token 数增加的变化。如图 3 所示，本文模型对退化比其他采样方法更鲁棒：只有到最大 token 长度达 2000 时退化分才超过 0.1，而其他基线在更短长度上就已出现明显更高的退化分。这表明：随序列长度增长，本方法比”把累积输出直接回馈进指令”的做法提供显著更强的抗退化能力。</p>
+<h4 id="5-2-6-休眠神经元比率分析（Analysis-of-Dormant-Neuron-Ratios）"><a href="#5-2-6-休眠神经元比率分析（Analysis-of-Dormant-Neuron-Ratios）" class="headerlink" title="5.2.6 休眠神经元比率分析（Analysis of Dormant Neuron Ratios）"></a>5.2.6 休眠神经元比率分析（Analysis of Dormant Neuron Ratios）</h4><p>为考察迭代式多分支故事生成中神经元激活的范围，用 LLaMA-3.1-8B 做休眠神经元分析（Sokar et al., 2023）；完整结果见附录 A。具体定义：全连接层中某个神经元的 GELU 激活值低于 5 × 10⁻⁵ 即视为”休眠”。如图 4 所示，所有基线方法的神经激活都随迭代逐渐减少，表明潜在创造力在下降；而本文方法的休眠神经元比率却在下降——即随迭代次数增加，神经元激活范围反而扩大。这说明本方法不只是简单地避免重复先前 token，而是更有效地激发了模型的内在创造力。</p>
+<h4 id="5-2-7-定性分析（Qualitative-Analysis）"><a href="#5-2-7-定性分析（Qualitative-Analysis）" class="headerlink" title="5.2.7 定性分析（Qualitative Analysis）"></a>5.2.7 定性分析（Qualitative Analysis）</h4><p>表 5 展示本方法如何促使新生成故事与负样本在概念与叙事上发散。例子中，先前生成的故事（左）是明亮欢快的设定（”美丽的夏日傍晚””繁华的城市”），表达期待与紧张；新解码的故事（右）则转为阴郁的基调、雨天的场景（”细雨””不起眼的小酒馆”），传达忧郁与无聊等情绪；情节也从计划好的约会变成酒吧里的偶遇。这些差异凸显了基于相似性的对比惩罚在促进多分支故事的概念与叙事多样性上的有效性。</p>
+<hr>
+<h2 id="6-结论（Conclusion）"><a href="#6-结论（Conclusion）" class="headerlink" title="6 结论（Conclusion）"></a>6 结论（Conclusion）</h2><p>本文提出回避解码（Avoidance Decoding），一种旨在增强多分支故事生成多样性的新解码策略。该方法用概念级与叙事级相似性惩罚的混合，对不同分支故事间的相似性进行对比式地惩罚 token 逻辑值。自动评估与人工评估一致表明：回避解码在多样性上显著优于现有基线，同时有效缓解了”多样性与退化”之间常见的权衡。此外，休眠神经元分析表明，该方法激发了更深层的模型创造力——生成过程中神经元激活范围更广即为证据。</p>
+<hr>
+<h2 id="7-局限性（Limitations）"><a href="#7-局限性（Limitations）" class="headerlink" title="7 局限性（Limitations）"></a>7 局限性（Limitations）</h2><p>尽管回避解码无需任何额外训练或随机采样，就表现出强多样性和对退化的有效抑制，但它存在解码时间增加的缺点；且负样本越多，这一问题越突出。为缓解计算开销，一个可行的办法是：负样本记忆中只保留最近若干输出的固定大小窗口，而不是维护全部输出历史。此外，进一步调参或许能在退化与多样性之间获得更好的权衡。</p>
+<hr>
+<h2 id="8-致谢（Acknowledgments）"><a href="#8-致谢（Acknowledgments）" class="headerlink" title="8 致谢（Acknowledgments）"></a>8 致谢（Acknowledgments）</h2><p>感谢匿名审稿人建设性且深刻的意见。K. Jung 隶属于首尔国立大学 ASRI。本工作受韩国国家研究基金会（NRF）拨款支持（由韩国政府 MSIT 资助，编号 RS-2025-02263628）；并部分受韩国信息通信技术规划与评估研究院（IITP）拨款支持（韩国政府 MSIT 资助）：[RS-2021-II211343 人工智能研究生院项目（首尔国立大学）；No.RS-2021-II212068 人工智能创新中心；No.RS-2022-II220184 低成本适应不断演进伦理政策的人工智能技术开发与研究]。</p>
+<hr>
+<h2 id="参考文献（References）"><a href="#参考文献（References）" class="headerlink" title="参考文献（References）"></a>参考文献（References）</h2><p>按字母顺序列出约 60 条文献（多为 arXiv 预印本与会议论文），主要包括：</p>
+<ul>
+<li>解码策略类：Holtzman et al. 2019（神经文本退化）、Meister et al. 2023（Typical 采样）、Basu et al. 2020（Mirostat）、Nguyen et al. 2024（Min-p 采样）、Vijayakumar et al. 2016（多样化束搜索）、Su et al. 2022（对比搜索框架）、Li et al. 2022（对比解码）、Chuang et al. 2023（DoLa）、Arias et al. 2024（自适应对比搜索）、Hokamp and Liu 2017（词典约束解码）等；</li>
+<li>故事生成类：Park et al. 2024a&#x2F;b、Fan et al. 2018、Materzok 2025、Bae and Kim 2024、Huang et al. 2024（What-if）、Alabdulkarim et al. 2021、Jaschek et al. 2019、Nottingham et al. 2024、Wen et al. 2023、Patel et al. 2024、Ghaffari and Hokamp 2025 等；</li>
+<li>评估指标类：Papineni et al. 2002（BLEU）、Lin 2004（ROUGE）、Banerjee and Lavie 2005（METEOR）、Reimers and Gurevych 2019（Sentence-BERT）；</li>
+<li>模型报告类：Jiang et al. 2023（Mistral 7B）、Bai et al. 2023（Qwen 技术报告）、Touvron et al. 2024（Llama 3）、OpenAI 2024（GPT-4o System Card）、OpenAI 2025（gpt-o4-mini）；</li>
+<li>创造力&#x2F;多样性研究类：Wenger and Kenett 2025、Kirk et al. 2023、Zhang et al. 2025（NoveltyBench）、Lagzian et al. 2025、Sun et al. 2025、Wang et al. 2024、Wu et al. 2025a&#x2F;b、Sokar et al. 2023（休眠神经元现象）、Kim et al. 2025、Guo et al. 2025、Zhu et al. 2023 等。</li>
+</ul>
+<hr>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="A-休眠神经元分析完整结果"><a href="#A-休眠神经元分析完整结果" class="headerlink" title="A 休眠神经元分析完整结果"></a>A 休眠神经元分析完整结果</h3><p>如图 5 所示，所有基线中只有本文模型的休眠神经元比率随迭代下降。各方法线性趋势线斜率为：Top-k +0.001540、CS +0.001875、ACS +0.001634、Typical +0.002215、Mirostat +0.001754、CD +0.000615、Min-p +0.001741、Top-p +0.002260、Naive +0.002439、OURS −0.000675。</p>
+<h3 id="B-退化趋势与迭代次数的关系"><a href="#B-退化趋势与迭代次数的关系" class="headerlink" title="B 退化趋势与迭代次数的关系"></a>B 退化趋势与迭代次数的关系</h3><p>如图 6 所示，在大分支设置下，平均退化分随迭代次数增加而上升。这一趋势表明：由于作为负样本的先前输出不断累积，模型内在创造力逐渐耗尽，语言结构也随之逐步崩坏。尽管如此，本文模型始终比仅用 CSP 的消融版本退化分更低，证明混合惩罚即使在高分支配置下依然鲁棒。</p>
+<h3 id="C-人工评估细节"><a href="#C-人工评估细节" class="headerlink" title="C 人工评估细节"></a>C 人工评估细节</h3><p>招募英语流利的研究生和本科生作为标注者，向他们提供任务定义的详细说明、指令及各模型的样本；并通过招募公告和说明告知所有参与者：其标注将用于学术目的并会发表在论文材料中。7 名标注者每人拿到 3 组样本——每组包含 13 个基线各自的 5 条输出——并针对每组样本回答 3 个问题。关于报酬：合作者先自行标注 5 小时，以估计同等时间能完成的平均标注量；据此确定每个样本 0.5 美元的费率，确保标注者至少达到最低工资。为评估标注者间一致性，用每位标注者的模型级平均分计算平均测度 ICC(2,k)：多样性 0.93、创造力 0.91、退化 0.62，说明各指标达到”可接受”至”优秀”的信度。</p>
+<h3 id="D-完整实验结果"><a href="#D-完整实验结果" class="headerlink" title="D 完整实验结果"></a>D 完整实验结果</h3><p>表 9–14 给出 LLaMA 3B、LLaMA 8B、Qwen 7B 在 ReedsyPrompts 与 WritingPrompts 数据集上的完整实验结果。本文模型在大多数情况下表现最佳；但在 LLaMA 8B 上，其性能与 OursCSP 非常接近，仅有微小差距。</p>
+<h3 id="E-退化评估细则（图-7-的完整提示）"><a href="#E-退化评估细则（图-7-的完整提示）" class="headerlink" title="E 退化评估细则（图 7 的完整提示）"></a>E 退化评估细则（图 7 的完整提示）</h3><blockquote>
+<p>你是严格的文本退化评估者。你将收到一段文本，任务是评估其是否表现出 LLM 退化的迹象。只返回有效 JSON：{“degeneration_score”: [0.0,1.0] 浮点数, “label”: “OK” 或 “DEGENERATED”（阈值 0.30）, “issues”: 最多 4 条要点式字符串，解释关键问题}。以下细则 4 个维度各占 0.25 权重：</p>
+<ol>
+<li><strong>句法完整性</strong>（语法与句子结构）：0.0&#x3D;语法无瑕、标点合理、句子完整；0.2–0.4&#x3D;轻微连写句或措辞生硬；0.6–0.8&#x3D;频繁结构错误或语法混乱；1.0&#x3D;句子结构破碎混乱。语法有效时不得惩罚复杂或诗意的句式。</li>
+<li><strong>语义轨迹</strong>（逻辑与主题连贯性）：0.0&#x3D;思路发展清晰合逻辑；0.2–0.4&#x3D;有些过渡松散或意外插入；0.6–0.8&#x3D;句子间思路断裂；1.0&#x3D;没有连贯的信息或推进。意义保留时不得惩罚元虚构评论或风格化离题。</li>
+<li><strong>词汇合理性</strong>（用词与语境适切性）：0.0&#x3D;所有词与语气和含义匹配；0.2–0.4&#x3D;个别用词不寻常但可理解；0.6–0.8&#x3D;措辞怪异、语气不搭、罕见词组合；1.0&#x3D;无意义或超现实词组合（如 “fractional nut satisfaction”）。有意使用诗意、古语或风格化语言时不得惩罚。</li>
+<li><strong>噪声症状</strong>（重复、絮叨、词语沙拉）：0.0&#x3D;无异常模式；0.2–0.4&#x3D;轻度风格化重复或啰嗦；0.6–0.8&#x3D;分散注意的重复、填充语或随机性；1.0&#x3D;明显失控生成：token 循环、幻觉、胡言乱语。<strong>若段落最后一句因长度限制被截断，绝不要惩罚。</strong><br>重要：运用专业判断打分；专注于检测真正的退化（如逻辑断裂、无意义、幻觉文本）；除 JSON 外绝不返回任何内容，不加解释或评论。</li>
+</ol>
+</blockquote>
+<h3 id="F-LLMScore-评估细则（图-8-的完整提示）"><a href="#F-LLMScore-评估细则（图-8-的完整提示）" class="headerlink" title="F LLMScore 评估细则（图 8 的完整提示）"></a>F LLMScore 评估细则（图 8 的完整提示）</h3><blockquote>
+<p>你是文本多样性评估者。下面有 15 个编号文本样本，任务是从视角、风格、情节结构、语言变化四个角度评估它们的多样性。输出必须是 JSON：{“diversity_score”: 0.0–1.0 浮点数（0&#x3D;所有样本几乎相同，1&#x3D;样本最大程度多样）, “justification”: 一句解释}。评分指南：0.0&#x3D;所有样本结构与语义几乎相同；0.1–0.3&#x3D;措辞或细节略有变化，但大体沿用同一模板；0.4–0.6&#x3D;视角、语气、场景或内容发展有显著变化；0.7–0.9&#x3D;叙事框架、想象细节或体裁转换有实质性差异；1.0&#x3D;样本在形式、功能与声音上最大程度不同。角色、场景或文学手法的细微变化要从宽处理；只要表面特征有意义的差异，不惩罚共享主题。只返回有效 JSON。</p>
+</blockquote>
+<h3 id="G-基线生成的详细指令（图-9-的完整提示）"><a href="#G-基线生成的详细指令（图-9-的完整提示）" class="headerlink" title="G 基线生成的详细指令（图 9 的完整提示）"></a>G 基线生成的详细指令（图 9 的完整提示）</h3><blockquote>
+<p>你是一个乐于助人、有创造力的助手，始终用英语回答并避免不受欢迎的回复。请根据以下提示写一个故事。<strong>不要生成与以下示例相似的回答</strong>：{all_previous_outputs}</p>
+<p>正文说明：除 Ours 变体外的所有基线，都被配置为在重复式多分支故事生成过程中接收全部先前生成内容，以及”鼓励后续分支输出不相似”的指令。</p>
+</blockquote>
+<h3 id="H-ChatGPT-的使用与-OpenAI-条款合规"><a href="#H-ChatGPT-的使用与-OpenAI-条款合规" class="headerlink" title="H ChatGPT 的使用与 OpenAI 条款合规"></a>H ChatGPT 的使用与 OpenAI 条款合规</h3><p>本文利用 OpenAI 的 ChatGPT 在论文写作与排版的润色方面提供有限协助；所有实质性贡献（核心方法、实验、分析）均由作者独立完成。该使用符合 OpenAI 的使用条款与使用政策。</p>
+<h3 id="I-自动指标与人工评分的相关性"><a href="#I-自动指标与人工评分的相关性" class="headerlink" title="I 自动指标与人工评分的相关性"></a>I 自动指标与人工评分的相关性</h3><p>如表 7 所示（Spearman&#x2F;Pearson 相关系数：BLEU↓ −0.73&#x2F;−0.68；ROUGE-L↓ −0.69&#x2F;−0.67；METEOR↓ −0.70&#x2F;−0.68；Cosine Sim↓ −0.72&#x2F;−0.72；LLMScore↑ 0.51&#x2F;0.46），本文对人工评分与自动指标做了相关性分析。由于人工评估者给多样性更高的输出打更高分——这与 BLEU、ROUGE-L、METEOR、余弦相似度等基于相似度的指标方向相反，而与 LLMScore 方向一致——结论是：各指标均与人工判断呈强相关。此外，本文确实测量了标注者间一致性，结果显示很强的一致性，进一步支持人工评估的可靠性。</p>
+<h3 id="J-超参数调优的经验实验"><a href="#J-超参数调优的经验实验" class="headerlink" title="J 超参数调优的经验实验"></a>J 超参数调优的经验实验</h3><p>如表 8 所示（(β, δ) 配置 → Degen&#x2F;LLMScore：(2.0, 0.5)→0.090&#x2F;54.25；(1.0, 0.5)→0.006&#x2F;39.50；(3.0, 0.5)→0.175&#x2F;67.95；(2.0, 0.2)→0.028&#x2F;47.25；(2.0, 0.8)→0.120&#x2F;61.04），本文做了若干经验试验来确定超参数取值。虽然部分配置 LLMScore 更高，但退化分也超过 0.1——本文视此为严重的性能下降，故不采用。</p>
+
+      
+    </div>
+
+    
+      
+
+    
+
+    <footer class="article-footer">
+      <a data-url="http://bantmetor.github.io/2026/09/01/essay1/" data-id="cuidzZEkU1xkZhfg1P796iKNL" class="article-share-link">
+        <i class="fa fa-share"></i> Share
+      </a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+<ul id="article-nav" class="nav nav-pills nav-justified">
+  
+  <li role="presentation">
+    <a href="/2026/08/28/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <i class="fa fa-chevron-left pull-left"></i>
+      <span class="article-nav-link-title">Hello World</span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+
+  
+</article>
+
+
+
+
+        </div>
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          
+  <div class="sidebar-module sidebar-module-inset">
+  <h4>About</h4>
+  <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+
+</div>
+
+
+  
+
+
+  
+  <div class="sidebar-module">
+    <h4>Tags</h4>
+    <ul class="sidebar-module-list" itemprop="keywords"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a><span class="sidebar-module-list-count">1</span></li></ul>
+  </div>
+
+
+
+  
+  <div class="sidebar-module">
+    <h4>Tag Cloud</h4>
+    <p class="tagcloud">
+      <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </p>
+  </div>
+
+
+  
+  <div class="sidebar-module">
+    <h4>Archives</h4>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2026/09/">September 2026</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2026/08/">August 2026</a><span class="sidebar-module-list-count">2</span></li></ul>
+  </div>
+
+
+
+  
+  <div class="sidebar-module">
+    <h4>Recents</h4>
+    <ul class="sidebar-module-list">
+      
+        <li>
+          <a href="/2026/09/01/essay1/">AI生成文本去除重复性方面的研究 1 翻译</a>
+        </li>
+      
+        <li>
+          <a href="/2026/08/28/hello-world/">Hello World</a>
+        </li>
+      
+        <li>
+          <a href="/2026/08/28/tree/">树链剖分模板</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+        </div>
+    </div>
+  </div>
+  <footer class="blog-footer">
+  <div class="container">
+    <div id="footer-info" class="inner">
+      &copy; 2026 BantMetor<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+  
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" integrity="sha384-8gBf6Y4YYq7Jx97PIqmTwLPin4hxIzQw5aDmUg/DDhul9fFpbbLcLh3nTIIDJKhx" crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+</body>
+</html>
