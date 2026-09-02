@@ -76,6 +76,130 @@
         <div class="col-sm-8 blog-main">
           
   
+    <article id="post-essayfrance" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/09/02/essayfrance/">法语功能词占比的历时演变：词表法实测报告</a>
+    </h1>
+  
+
+
+  </header>
+
+  <div class="article-meta">
+    <div class="article-datetime">
+  <a href="/2026/09/02/essayfrance/" class="article-date"><time datetime="2026-09-01T16:00:00.000Z" itemprop="datePublished">2026-09-02</time></a>
+</div>
+
+    
+    
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>研究问题：法语从综合语向分析语演变的过程中，文本中功能词（虚词）占比是否显著上升？<br>方法：逐时期闭类词表（closed-class lexicon）计数，三个时期各 1200 词元语料 + 用户例句同流水线复测。<br>日期：2026-09-02 ｜ 可复现：<code>node analyse_fonction_mots.js</code></p>
+</blockquote>
+<hr>
+<h2 id="0-结论速览"><a href="#0-结论速览" class="headerlink" title="0. 结论速览"></a>0. 结论速览</h2><ol>
+<li><strong>假设的方向成立，但幅度比原先的估算小一个数量级</strong>：功能词占比（含助动词，口径 R_B）从 13 世纪的 <strong>53.8%</strong> 升到 20 世纪的 <strong>58.4%</strong>，1300 年间仅上升约 <strong>4.6 个百分点</strong>——不是”19% → 71%”的 52 个点。</li>
+<li><strong>原先三个例句的数字全部需要修正</strong>（详见 §3）：古法语片段 33.3%（原估 ~19%）、中古法语重构句 56.3%（原估 33–40%）、加缪句 74.1%（原估 ~71%，接近但词数口径有误）。</li>
+<li><strong>最有价值的发现不在总量，而在内部构成</strong>：中世纪文本的功能词重心是”衔接词”（介词+连词：古法语 22.8%、中古法语 30.3%），现代文本的重心转移到”指称词”（限定词+代词：30.8%）。分析化的微观机制发生了<strong>质变</strong>。</li>
+<li>相应地，**实义词占比（词汇密度）**从 42.2% 降到 38.0%（口径 R_C 的补集）。</li>
+</ol>
+<hr>
+<h2 id="1-方法与数据"><a href="#1-方法与数据" class="headerlink" title="1. 方法与数据"></a>1. 方法与数据</h2><h3 id="1-1-语料（各-1200-词元，取正文起点之后）"><a href="#1-1-语料（各-1200-词元，取正文起点之后）" class="headerlink" title="1.1 语料（各 1200 词元，取正文起点之后）"></a>1.1 语料（各 1200 词元，取正文起点之后）</h3><table>
+<thead>
+<tr>
+<th>时期</th>
+<th>文本</th>
+<th>成书</th>
+<th>版本</th>
+<th>来源</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>古法语</td>
+<td>《Roman de la Rose》Guillaume de Lorris 部分</td>
+<td>c. 1230</td>
+<td>Marteau 1878</td>
+<td>Project Gutenberg #16816</td>
+</tr>
+<tr>
+<td>中古法语</td>
+<td>Froissart《编年史》Livre I § 181（1342–1346）</td>
+<td>c. 1369–73</td>
+<td>Luce 1869 学术版</td>
+<td>Project Gutenberg #72385</td>
+</tr>
+<tr>
+<td>现代法语</td>
+<td>Proust《Du côté de chez Swann》Combray 开篇</td>
+<td>1913</td>
+<td>—</td>
+<td>Project Gutenberg #2650</td>
+</tr>
+</tbody></table>
+<p><strong>为什么 Rose 而不是 Aucassin 做古法语语料</strong>：Project Gutenberg 无古法语散文；Aucassin 序诗（15 行）已从 <a target="_blank" rel="noopener" href="http://3aroskear.co.uk/html/anthology/aucassin.html">3aroskear.co.uk 选集</a> 核对原文，用作例句对照（§3），全文语料另用 Rose。此点及文体差异是本研究的主要局限（§5）。</p>
+<h3 id="1-2-计数方法：闭类词表，而非-POS-标注"><a href="#1-2-计数方法：闭类词表，而非-POS-标注" class="headerlink" title="1.2 计数方法：闭类词表，而非 POS 标注"></a>1.2 计数方法：闭类词表，而非 POS 标注</h3><p>现代 POS 标注器（spaCy 等）不识别 “del &#x2F; vauroit &#x2F; oïr &#x2F; avés” 等历史形态，会系统性地把古法语功能词误判为名词。本研究采用<strong>逐时期功能词表</strong>：</p>
+<ul>
+<li><strong>现代基底词表</strong>：约 600 词形（限定词、代词、介词、连词、否定词、助动词、边界副词）；</li>
+<li><strong>中古增补</strong>：<code>del dou du el es ou ès</code>、<code>li che chil chus</code>（皮卡第形式）、<code>avoit aroit vorroit</code>、<code>ot orent</code>（avoir 简单过去时）、<code>iert ert</code>（être 将来时）等约 300 词形；</li>
+<li><strong>古法增补</strong>：<code>cist cil cele</code>、<code>ço çou</code>、<code>voil vuel viaus</code>、<code>vauroit</code> 等；</li>
+<li>8 类词（det&#x2F;pro&#x2F;prep&#x2F;conj&#x2F;neg&#x2F;aux&#x2F;border&#x2F;content），三个比率口径：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>口径</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>R_A</strong></td>
+<td>（限定词+代词+介词+连词+否定词）&#x2F; N（最保守，不含任何动词）</td>
+</tr>
+<tr>
+<td><strong>R_B</strong></td>
+<td>R_A + 助动词&#x2F;半助动词（<strong>核心指标</strong>：avoir&#x2F;être&#x2F;pouvoir&#x2F;devoir&#x2F;vouloir&#x2F;aller&#x2F;venir&#x2F;faire&#x2F;laisser&#x2F;falloir 的全部屈折形）</td>
+</tr>
+<tr>
+<td><strong>R_C</strong></td>
+<td>R_B + 边界副词（程度&#x2F;方式&#x2F;时间副词、tout、même 等宽口径）</td>
+</tr>
+</tbody></table>
+        
+          <p class="article-more-link">
+            <a class="btn btn-primary" href="/2026/09/02/essayfrance/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+
+    
+
+    <footer class="article-footer">
+      <a data-url="http://bantmetor.github.io/2026/09/02/essayfrance/" data-id="cuidOvbCdkFJ4nV1ib_Lz5BJn" class="article-share-link">
+        <i class="fa fa-share"></i> Share
+      </a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-essay1" class="article article-type-post" itemscope itemprop="blogPost">
 
   <header class="article-header">
@@ -102,15 +226,15 @@
 
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="用于多样化多分支故事生成的回避解码"><a href="#用于多样化多分支故事生成的回避解码" class="headerlink" title="用于多样化多分支故事生成的回避解码"></a>用于多样化多分支故事生成的回避解码</h1><p><strong>Avoidance Decoding for Diverse Multi-Branch Story Generation</strong></p>
+        <h2 id="用于多样化多分支故事生成的回避解码"><a href="#用于多样化多分支故事生成的回避解码" class="headerlink" title="用于多样化多分支故事生成的回避解码"></a>用于多样化多分支故事生成的回避解码</h2><p><strong>Avoidance Decoding for Diverse Multi-Branch Story Generation</strong></p>
 <blockquote>
 <p>原文出处：Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing（2025年自然语言处理实证方法会议论文集），第 7489–7505 页，2025年11月4–9日，©2025 Association for Computational Linguistics（计算语言学协会）</p>
 </blockquote>
 <p><strong>作者</strong></p>
 <ul>
-<li>Kyeongman Park（首尔大学 Seoul National University，<a href="mailto:&#x7a;&#x7a;&#97;&#110;&#x67;&#x6d;&#x61;&#110;&#x65;&#64;&#x73;&#110;&#x75;&#46;&#97;&#x63;&#46;&#107;&#x72;">zzangmane@snu.ac.kr</a>）</li>
-<li>Nakyeong Yang（首尔大学，<a href="mailto:&#121;&#x6e;&#121;&#x30;&#53;&#48;&#54;&#x40;&#115;&#110;&#117;&#x2e;&#97;&#99;&#x2e;&#x6b;&#114;">yny0506@snu.ac.kr</a>）</li>
-<li>Kyomin Jung（首尔大学，<a href="mailto:&#107;&#106;&#117;&#110;&#x67;&#x40;&#x73;&#110;&#117;&#x2e;&#x61;&#99;&#46;&#x6b;&#114;">kjung@snu.ac.kr</a>）</li>
+<li>Kyeongman Park（首尔大学 Seoul National University，<a href="mailto:&#x7a;&#122;&#97;&#110;&#103;&#109;&#97;&#x6e;&#101;&#64;&#x73;&#110;&#117;&#46;&#x61;&#99;&#46;&#x6b;&#x72;">zzangmane@snu.ac.kr</a>）</li>
+<li>Nakyeong Yang（首尔大学，<a href="mailto:&#121;&#110;&#121;&#48;&#x35;&#x30;&#x36;&#x40;&#115;&#110;&#x75;&#46;&#97;&#99;&#x2e;&#x6b;&#x72;">yny0506@snu.ac.kr</a>）</li>
+<li>Kyomin Jung（首尔大学，<a href="mailto:&#107;&#x6a;&#117;&#x6e;&#103;&#64;&#115;&#x6e;&#x75;&#x2e;&#97;&#x63;&#46;&#107;&#114;">kjung@snu.ac.kr</a>）</li>
 </ul>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>大语言模型（LLMs）在给定相同输入提示时，由于创造性多样性有限，常常生成重复且单调的输出，在故事生成等任务中尤为明显。为应对这一挑战，我们提出一种新颖的解码策略——<strong>回避解码（Avoidance Decoding）</strong>，该方法通过对与先前生成输出的相似性施加惩罚来修改词元 logits，从而鼓励生成更具多样性的多分支故事。该惩罚自适应地平衡两种相似性度量：(1) <strong>概念级相似性惩罚（CSP）</strong>，在早期阶段优先应用，以丰富初始故事概念；(2) <strong>叙事级相似性惩罚（NSP）</strong>，在后期逐步加大强调，以确保自然且多样的情节发展。值得注意的是，与强基线相比，我们的方法将输出多样性最高提升 2.6 倍，并将重复率平均降低 30%，同时有效缓解文本退化。此外，我们揭示出该方法能激活更广泛的神经元，表明它利用了模型的内在创造力。</p>
 <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1 引言"></a>1 引言</h2><p>人类作家能就相同的构思写出完全不同的文本。然而，大语言模型（LLMs）在写作创造力上仍难以达到人类水平。此前的研究发现，即便是最先进的模型，如 GPT-4o（OpenAI, 2024），也会生成重复和单调的模式（Zhang et al., 2025; Wu et al., 2025a; Wenger and Kenett, 2025; Lagzian et al., 2025）。这一倾向限制了 LLMs 在需要概念多样性和广泛探索的任务上的表现，例如故事生成（Park et al., 2024a; Materzok, 2025; Huang et al., 2024）和复杂推理（Wang et al., 2024; Sun et al., 2025; Kirk et al., 2023; Wu et al., 2025b）。尤其在故事生成中，该任务带来独特的挑战：它必须通过创造性的构思和叙事吸引读者，因此确保用 LLMs 生成故事时的多样性至关重要。</p>
@@ -131,7 +255,7 @@
     
 
     <footer class="article-footer">
-      <a data-url="http://bantmetor.github.io/2026/09/01/essay1/" data-id="cuidzZEkU1xkZhfg1P796iKNL" class="article-share-link">
+      <a data-url="http://bantmetor.github.io/2026/09/01/essay1/" data-id="cuidpYco-zuRdRIquSEcnuBqm" class="article-share-link">
         <i class="fa fa-share"></i> Share
       </a>
       
@@ -185,7 +309,7 @@
     
 
     <footer class="article-footer">
-      <a data-url="http://bantmetor.github.io/2026/08/28/hello-world/" data-id="cuid9RaYav9Z4-9GRkVZKQwqn" class="article-share-link">
+      <a data-url="http://bantmetor.github.io/2026/08/28/hello-world/" data-id="cuidFrQWFnrH3mliZYXOi5AlD" class="article-share-link">
         <i class="fa fa-share"></i> Share
       </a>
       
@@ -235,7 +359,7 @@
     
 
     <footer class="article-footer">
-      <a data-url="http://bantmetor.github.io/2026/08/28/tree/" data-id="cuidZ3iON6HJ1_0kmJexlUXlN" class="article-share-link">
+      <a data-url="http://bantmetor.github.io/2026/08/28/tree/" data-id="cuiduCimTsacSc3EoiGU5b_ne" class="article-share-link">
         <i class="fa fa-share"></i> Share
       </a>
       
@@ -271,7 +395,7 @@
   
   <div class="sidebar-module">
     <h4>Tags</h4>
-    <ul class="sidebar-module-list" itemprop="keywords"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a><span class="sidebar-module-list-count">1</span></li></ul>
+    <ul class="sidebar-module-list" itemprop="keywords"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a><span class="sidebar-module-list-count">2</span></li></ul>
   </div>
 
 
@@ -280,7 +404,7 @@
   <div class="sidebar-module">
     <h4>Tag Cloud</h4>
     <p class="tagcloud">
-      <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+      <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 20px;">论文</a>
     </p>
   </div>
 
@@ -288,7 +412,7 @@
   
   <div class="sidebar-module">
     <h4>Archives</h4>
-    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2026/09/">September 2026</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2026/08/">August 2026</a><span class="sidebar-module-list-count">2</span></li></ul>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2026/09/">September 2026</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2026/08/">August 2026</a><span class="sidebar-module-list-count">2</span></li></ul>
   </div>
 
 
@@ -297,6 +421,10 @@
   <div class="sidebar-module">
     <h4>Recents</h4>
     <ul class="sidebar-module-list">
+      
+        <li>
+          <a href="/2026/09/02/essayfrance/">法语功能词占比的历时演变：词表法实测报告</a>
+        </li>
       
         <li>
           <a href="/2026/09/01/essay1/">AI生成文本去除重复性方面的研究 1 翻译</a>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>法语功能词占比的历时演变：词表法实测报告 | Le blog de Benoit Meteau</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="研究问题：法语从综合语向分析语演变的过程中，文本中功能词（虚词）占比是否显著上升？方法：逐时期闭类词表（closed-class lexicon）计数，三个时期各 1200 词元语料 + 用户例句同流水线复测。日期：2026-09-02 ｜ 可复现：node analyse_fonction_mots.js   0. 结论速览 假设的方向成立，但幅度比原先的估算小一个数量级：功能词占比（含助动词">
+<meta property="og:type" content="article">
+<meta property="og:title" content="法语功能词占比的历时演变：词表法实测报告">
+<meta property="og:url" content="http://bantmetor.github.io/2026/09/02/essayfrance/index.html">
+<meta property="og:site_name" content="Le blog de Benoit Meteau">
+<meta property="og:description" content="研究问题：法语从综合语向分析语演变的过程中，文本中功能词（虚词）占比是否显著上升？方法：逐时期闭类词表（closed-class lexicon）计数，三个时期各 1200 词元语料 + 用户例句同流水线复测。日期：2026-09-02 ｜ 可复现：node analyse_fonction_mots.js   0. 结论速览 假设的方向成立，但幅度比原先的估算小一个数量级：功能词占比（含助动词">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-02T14:50:14.932Z">
+<meta property="article:author" content="BantMetor">
+<meta property="article:tag" content="论文">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Le blog de Benoit Meteau" type="application/atom+xml">
+  
+  
+  
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+  
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+  <nav class="navbar navbar-inverse">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="main-menu-navbar">
+      <ul class="nav navbar-nav">
+        
+          <li><a class=""
+                 href="/index.html">Home</a></li>
+        
+          <li><a class=""
+                 href="/archives/">Archives</a></li>
+        
+      </ul>
+
+      <!--
+      <ul class="nav navbar-nav navbar-right">
+        
+          <li><a href="/atom.xml" title="RSS Feed"><i class="fa fa-rss"></i></a></li>
+        
+      </ul>
+      -->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+  <div class="container">
+    <div class="blog-header">
+  <h1 class="blog-title">Le blog de Benoit Meteau</h1>
+  
+</div>
+
+    <div class="row">
+        <div class="col-sm-8 blog-main">
+          <article id="post-essayfrance" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
+    
+  
+    <h1 class="article-title" itemprop="name">
+      法语功能词占比的历时演变：词表法实测报告
+    </h1>
+  
+
+
+  </header>
+
+  <div class="article-meta">
+    <div class="article-datetime">
+  <a href="/2026/09/02/essayfrance/" class="article-date"><time datetime="2026-09-01T16:00:00.000Z" itemprop="datePublished">2026-09-02</time></a>
+</div>
+
+    
+    
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>研究问题：法语从综合语向分析语演变的过程中，文本中功能词（虚词）占比是否显著上升？<br>方法：逐时期闭类词表（closed-class lexicon）计数，三个时期各 1200 词元语料 + 用户例句同流水线复测。<br>日期：2026-09-02 ｜ 可复现：<code>node analyse_fonction_mots.js</code></p>
+</blockquote>
+<hr>
+<h2 id="0-结论速览"><a href="#0-结论速览" class="headerlink" title="0. 结论速览"></a>0. 结论速览</h2><ol>
+<li><strong>假设的方向成立，但幅度比原先的估算小一个数量级</strong>：功能词占比（含助动词，口径 R_B）从 13 世纪的 <strong>53.8%</strong> 升到 20 世纪的 <strong>58.4%</strong>，1300 年间仅上升约 <strong>4.6 个百分点</strong>——不是”19% → 71%”的 52 个点。</li>
+<li><strong>原先三个例句的数字全部需要修正</strong>（详见 §3）：古法语片段 33.3%（原估 ~19%）、中古法语重构句 56.3%（原估 33–40%）、加缪句 74.1%（原估 ~71%，接近但词数口径有误）。</li>
+<li><strong>最有价值的发现不在总量，而在内部构成</strong>：中世纪文本的功能词重心是”衔接词”（介词+连词：古法语 22.8%、中古法语 30.3%），现代文本的重心转移到”指称词”（限定词+代词：30.8%）。分析化的微观机制发生了<strong>质变</strong>。</li>
+<li>相应地，**实义词占比（词汇密度）**从 42.2% 降到 38.0%（口径 R_C 的补集）。</li>
+</ol>
+<hr>
+<h2 id="1-方法与数据"><a href="#1-方法与数据" class="headerlink" title="1. 方法与数据"></a>1. 方法与数据</h2><h3 id="1-1-语料（各-1200-词元，取正文起点之后）"><a href="#1-1-语料（各-1200-词元，取正文起点之后）" class="headerlink" title="1.1 语料（各 1200 词元，取正文起点之后）"></a>1.1 语料（各 1200 词元，取正文起点之后）</h3><table>
+<thead>
+<tr>
+<th>时期</th>
+<th>文本</th>
+<th>成书</th>
+<th>版本</th>
+<th>来源</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>古法语</td>
+<td>《Roman de la Rose》Guillaume de Lorris 部分</td>
+<td>c. 1230</td>
+<td>Marteau 1878</td>
+<td>Project Gutenberg #16816</td>
+</tr>
+<tr>
+<td>中古法语</td>
+<td>Froissart《编年史》Livre I § 181（1342–1346）</td>
+<td>c. 1369–73</td>
+<td>Luce 1869 学术版</td>
+<td>Project Gutenberg #72385</td>
+</tr>
+<tr>
+<td>现代法语</td>
+<td>Proust《Du côté de chez Swann》Combray 开篇</td>
+<td>1913</td>
+<td>—</td>
+<td>Project Gutenberg #2650</td>
+</tr>
+</tbody></table>
+<p><strong>为什么 Rose 而不是 Aucassin 做古法语语料</strong>：Project Gutenberg 无古法语散文；Aucassin 序诗（15 行）已从 <a target="_blank" rel="noopener" href="http://3aroskear.co.uk/html/anthology/aucassin.html">3aroskear.co.uk 选集</a> 核对原文，用作例句对照（§3），全文语料另用 Rose。此点及文体差异是本研究的主要局限（§5）。</p>
+<h3 id="1-2-计数方法：闭类词表，而非-POS-标注"><a href="#1-2-计数方法：闭类词表，而非-POS-标注" class="headerlink" title="1.2 计数方法：闭类词表，而非 POS 标注"></a>1.2 计数方法：闭类词表，而非 POS 标注</h3><p>现代 POS 标注器（spaCy 等）不识别 “del &#x2F; vauroit &#x2F; oïr &#x2F; avés” 等历史形态，会系统性地把古法语功能词误判为名词。本研究采用<strong>逐时期功能词表</strong>：</p>
+<ul>
+<li><strong>现代基底词表</strong>：约 600 词形（限定词、代词、介词、连词、否定词、助动词、边界副词）；</li>
+<li><strong>中古增补</strong>：<code>del dou du el es ou ès</code>、<code>li che chil chus</code>（皮卡第形式）、<code>avoit aroit vorroit</code>、<code>ot orent</code>（avoir 简单过去时）、<code>iert ert</code>（être 将来时）等约 300 词形；</li>
+<li><strong>古法增补</strong>：<code>cist cil cele</code>、<code>ço çou</code>、<code>voil vuel viaus</code>、<code>vauroit</code> 等；</li>
+<li>8 类词（det&#x2F;pro&#x2F;prep&#x2F;conj&#x2F;neg&#x2F;aux&#x2F;border&#x2F;content），三个比率口径：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>口径</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>R_A</strong></td>
+<td>（限定词+代词+介词+连词+否定词）&#x2F; N（最保守，不含任何动词）</td>
+</tr>
+<tr>
+<td><strong>R_B</strong></td>
+<td>R_A + 助动词&#x2F;半助动词（<strong>核心指标</strong>：avoir&#x2F;être&#x2F;pouvoir&#x2F;devoir&#x2F;vouloir&#x2F;aller&#x2F;venir&#x2F;faire&#x2F;laisser&#x2F;falloir 的全部屈折形）</td>
+</tr>
+<tr>
+<td><strong>R_C</strong></td>
+<td>R_B + 边界副词（程度&#x2F;方式&#x2F;时间副词、tout、même 等宽口径）</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h3 id="1-3-预处理与消歧规则（全部在脚本内可查）"><a href="#1-3-预处理与消歧规则（全部在脚本内可查）" class="headerlink" title="1.3 预处理与消歧规则（全部在脚本内可查）"></a>1.3 预处理与消歧规则（全部在脚本内可查）</h3><ul>
+<li>省音扩展：<code>qu&#39; → que</code>、<code>l&#39; → le</code>、<code>jusqu&#39; → jusque</code> 等（补空格防止 <code>qu&#39;on → queon</code> 词元合并）；</li>
+<li>剔除纯数字与罗马数字词元（保留 <code>il/li/si/ci</code> 等合法词）；</li>
+<li>Luce 版清理：校勘行（<code>[n] Mss./Ms. …</code>）、行号、页码标记、异文标记 <code>[qu&#39;elle[248]] → qu&#39;elle</code>；</li>
+<li>歧义词按文体消歧：韵文样本中 <code>vers</code> &#x3D; 名词（诗），散文样本中 &#x3D; 介词；</li>
+<li>已知妥协：<code>en/y</code> 双类词按介词计、<code>or</code>（金&#x2F;连词）、<code>pas/point</code>（步&#x2F;否定）等歧义按功能词计——<strong>这类误差的方向在三时期一致，不影响历时对比的有效性</strong>。</li>
+</ul>
+<hr>
+<h2 id="2-语料实测结果（主表）"><a href="#2-语料实测结果（主表）" class="headerlink" title="2. 语料实测结果（主表）"></a>2. 语料实测结果（主表）</h2><p>N &#x3D; 1200 词元&#x2F;样本：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>古法语 13c（Rose）</th>
+<th>中古法语 14c（Froissart）</th>
+<th>现代法语 20c（Proust）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>限定词</td>
+<td>147 (12.3%)</td>
+<td>141 (11.8%)</td>
+<td><strong>215 (17.9%)</strong></td>
+</tr>
+<tr>
+<td>代词</td>
+<td>107 (8.9%)</td>
+<td>55 (4.6%)</td>
+<td><strong>154 (12.8%)</strong></td>
+</tr>
+<tr>
+<td>介词</td>
+<td>128 (10.7%)</td>
+<td><strong>209 (17.4%)</strong></td>
+<td>161 (13.4%)</td>
+</tr>
+<tr>
+<td>连词</td>
+<td>146 (12.2%)</td>
+<td>155 (12.9%)</td>
+<td>80 (6.7%)</td>
+</tr>
+<tr>
+<td>否定词</td>
+<td>24 (2.0%)</td>
+<td>15 (1.3%)</td>
+<td>18 (1.5%)</td>
+</tr>
+<tr>
+<td>助动词</td>
+<td>93 (7.8%)</td>
+<td>78 (6.5%)</td>
+<td>73 (6.1%)</td>
+</tr>
+<tr>
+<td>边界副词</td>
+<td>49 (4.1%)</td>
+<td>40 (3.3%)</td>
+<td>43 (3.6%)</td>
+</tr>
+<tr>
+<td>实义词</td>
+<td>506 (42.2%)</td>
+<td>507 (42.3%)</td>
+<td>456 (38.0%)</td>
+</tr>
+<tr>
+<td><strong>R_A</strong></td>
+<td>46.0%</td>
+<td>47.9%</td>
+<td><strong>52.3%</strong></td>
+</tr>
+<tr>
+<td><strong>R_B（核心）</strong></td>
+<td><strong>53.8%</strong></td>
+<td><strong>54.4%</strong></td>
+<td><strong>58.4%</strong></td>
+</tr>
+<tr>
+<td><strong>R_C（宽）</strong></td>
+<td>57.8%</td>
+<td>57.8%</td>
+<td><strong>62.0%</strong></td>
+</tr>
+</tbody></table>
+<h3 id="2-1-总量：缓慢、单调、稳健的上升"><a href="#2-1-总量：缓慢、单调、稳健的上升" class="headerlink" title="2.1 总量：缓慢、单调、稳健的上升"></a>2.1 总量：缓慢、单调、稳健的上升</h3><ul>
+<li>R_B：53.8% → 54.4% → 58.4%（+4.6 点）；R_A：46.0% → 47.9% → 52.3%（+6.3 点）。</li>
+<li>该方向与”综合语→分析语”假设一致，也与既有文献的量级一致（法语书面散文功能词占比通常落在 50–60% 区间），<strong>而不是 19% 对 71%</strong>。</li>
+<li>古法语与中古法语的差距极小（53.8 vs 54.4），一个样本内不能解读为”无变化”——Rose 是韵文且为第一人称梦幻叙事（代词多、连词多），天然抬高古法语数值；需要古法语<strong>散文</strong>对照才能定论（§5）。</li>
+</ul>
+<h3 id="2-2-内部构成：分析化的机制变了（本研究最重要的发现）"><a href="#2-2-内部构成：分析化的机制变了（本研究最重要的发现）" class="headerlink" title="2.2 内部构成：分析化的机制变了（本研究最重要的发现）"></a>2.2 内部构成：分析化的机制变了（本研究最重要的发现）</h3><table>
+<thead>
+<tr>
+<th>功能词组</th>
+<th>13c</th>
+<th>14c</th>
+<th>20c</th>
+<th>趋势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>限定词+代词（指称词）</td>
+<td>21.2%</td>
+<td>16.3%</td>
+<td><strong>30.8%</strong></td>
+<td>现代暴增</td>
+</tr>
+<tr>
+<td>介词+连词（衔接词）</td>
+<td>22.8%</td>
+<td><strong>30.3%</strong></td>
+<td>20.1%</td>
+<td>中世纪高峰</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>中世纪法语</strong>靠介词短语堆叠（Froissart 介词占 17.4%，”de le &#x2F; à le &#x2F; pour le” 尚未缩合）+ 大量 <code>et / si / que</code> 并列衔接；</li>
+<li><strong>现代法语</strong>的语法负载转移到<strong>冠词系统和代词系统</strong>（Proust 限定词+代词合计 30.8%）：名词几乎不再”裸奔”，格位消失后由 <code>de/à</code> 前置词 + 冠词双重标记。</li>
+<li>这正是一个比”占比上升”更精确的分析化叙述：<strong>功能词总量小幅上升，但功能分工彻底重组</strong>——从”衔接”走向”指称与限定”。</li>
+</ul>
+<hr>
+<h2 id="3-用户例句实测：逐条对照修正"><a href="#3-用户例句实测：逐条对照修正" class="headerlink" title="3. 用户例句实测：逐条对照修正"></a>3. 用户例句实测：逐条对照修正</h2><p>同一流水线（同词表、同预处理）对四个例句的复测：</p>
+<table>
+<thead>
+<tr>
+<th>例句</th>
+<th>原估算</th>
+<th>实测 R_B</th>
+<th>实测区间</th>
+<th>问题所在</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① 古法语片段（15 词）</td>
+<td>~19%</td>
+<td><strong>33.3%</strong></td>
+<td>26.7–33.3%</td>
+<td>漏算关系代词 <code>qui</code>；<code>vers</code> 在此是名词”诗”不是介词；<code>vauroit</code> 是 vouloir 条件式（情态助动词）；且 <code>del/du</code> 各是”介词+冠词”<strong>两个功能位</strong>，按词元计只有一个</td>
+</tr>
+<tr>
+<td>①b 同段序诗全本（79 词）</td>
+<td>—</td>
+<td><strong>49.4%</strong></td>
+<td>40.5–54.4%</td>
+<td>补上关系从句（<code>qu&#39;il soufri / qu&#39;il fist</code>）与续行后，功能词占比<strong>翻倍</strong>——证明 19% 是截断造成的假象</td>
+</tr>
+<tr>
+<td>② 中古法语重构句（16 词）</td>
+<td>33–40%</td>
+<td><strong>56.3%</strong></td>
+<td>50.0–56.3%</td>
+<td>实有 9 个功能词（et, pour, ce, que, le, de, avoit, de, la）而非 5–6 个；漏了指示词 <code>ce</code>、冠词 <code>la</code>、助动词 <code>avoit</code></td>
+</tr>
+<tr>
+<td>③ 加缪《鼠疫》句</td>
+<td>~71%</td>
+<td><strong>74.1%</strong></td>
+<td>51.9–85.2%</td>
+<td>原词数 24 有误：<code>qu&#39;on / l&#39;on / l&#39;être</code> 拆开后为 27 词元；71% 本身落在合理区间，方向正确</td>
+</tr>
+</tbody></table>
+<h3 id="3-1-方法论教训"><a href="#3-1-方法论教训" class="headerlink" title="3.1 方法论教训"></a>3.1 方法论教训</h3><ol>
+<li><strong>单句没有统计效力</strong>：同一套流水线，四个例句的 R_B 在 33%–74% 之间波动。一个介词的增减 &#x3D; 5–10 个点。≥1000 词元的语料才是可信的最小单位。</li>
+<li><strong>缩合形式要按功能位计</strong>：<code>del = de + le</code>。若把古法语的 <code>del/du/es/ou</code> 当一个词，会<strong>系统性低估</strong>古法语功能词占比——这恰好解释了你最初 19% 的来源：现代直觉 + 截断样本 + 单功能位计数三重偏差叠加。</li>
+<li><strong>助动词&#x2F;系动词必须入表</strong>：<code>avoit / est / puet / doit</code> 是”分析语”的发动机——正是它们接替了屈折形态的语法功能，漏掉它们就测不到想要的东西。</li>
+</ol>
+<hr>
+<h2 id="4-与”综合语→分析语”理论的关系"><a href="#4-与”综合语→分析语”理论的关系" class="headerlink" title="4. 与”综合语→分析语”理论的关系"></a>4. 与”综合语→分析语”理论的关系</h2><ul>
+<li>本数据支持该理论的一个<strong>弱版本</strong>：功能词占比缓慢上升（+4.6 点&#x2F;R_B），实义词密度缓慢下降（42.2% → 38.0%）；</li>
+<li>但不支持”虚词占比从 19% 暴涨到 71%”的强叙事。综合→分析的转变在<strong>13 世纪之前</strong>（拉丁语晚期→古法语早期，格位消失时）就已基本完成；13–20 世纪观察到的是<strong>分析化在内部的持续深化与重组</strong>（冠词强制化、代词膨胀、介词语法化），而非从零开始。</li>
+<li>若想测到”剧变”，正确的时间窗口应上推至 9–12 世纪（《斯特拉斯堡誓言》842 &#x2F; 《圣阿莱克西行传》11c &#x2F; 《罗兰之歌》c. 1100），或把粒度放到”每名词的冠词覆盖率””屈折残存率”等更细的指标。</li>
+</ul>
+<hr>
+<h2 id="5-局限与下一步"><a href="#5-局限与下一步" class="headerlink" title="5. 局限与下一步"></a>5. 局限与下一步</h2><ol>
+<li><strong>文体混杂</strong>：Rose 是韵文（第一人称梦幻叙事），Froissart&#x2F;Proust 是散文。古法语数值可能被文体抬高。应加入古法语<strong>散文</strong>对照：Villehardouin《君士坦丁堡征服记》（1207–13，Wikisource&#x2F;Gallica 有全文，需 HTTPS 环境下载）。</li>
+<li><strong>单点取样</strong>：每时期 1 个文本 1 段。下一步每时期取 3–5 个文本 × 多段样本，做 bootstrap 置信区间与显著性检验（脚本已模块化，扩展即可）。</li>
+<li><strong>版权提示</strong>：加缪《鼠疫》（1947）在法国受版权保护至 2031 年；本报告仅对单句作统计引用。正式论文建议改用 Proust（1922 年去世，公有领域）或 Gide 等。</li>
+<li><strong>词表完备性</strong>：OF&#x2F;MF 词表覆盖高频功能词形，但冷僻变体（如 <code>amprès / tresque</code> 等）可能有漏网；建议后续用古法语词典（Godefroy&#x2F;TLFi 词源栏）系统核对。</li>
+</ol>
+<hr>
+<h2 id="6-产物清单"><a href="#6-产物清单" class="headerlink" title="6. 产物清单"></a>6. 产物清单</h2><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>analyse_fonction_mots.js</code></td>
+<td>分析引擎（词表、分词、计数、CSV&#x2F;SVG 输出），<code>node analyse_fonction_mots.js</code> 一键复现</td>
+</tr>
+<tr>
+<td><code>结果.csv</code></td>
+<td>全部样本的逐类计数与三个口径比率</td>
+</tr>
+<tr>
+<td><code>对比图.svg</code></td>
+<td>三面板图：比率对比 &#x2F; 例句实测 &#x2F; 功能词内部构成堆叠图</td>
+</tr>
+<tr>
+<td><code>corpus/pg16816.txt</code>、<code>pg72385.txt</code>、<code>pg2650.txt</code></td>
+<td>三时期语料原文（Project Gutenberg，公有领域）</td>
+</tr>
+<tr>
+<td><code>check_noise.js</code></td>
+<td>样本纯净度检查（确认无校勘行、编者法语污染）</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+      
+
+    
+
+    <footer class="article-footer">
+      <a data-url="http://bantmetor.github.io/2026/09/02/essayfrance/" data-id="cuidOvbCdkFJ4nV1ib_Lz5BJn" class="article-share-link">
+        <i class="fa fa-share"></i> Share
+      </a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+<ul id="article-nav" class="nav nav-pills nav-justified">
+  
+  <li role="presentation">
+    <a href="/2026/09/01/essay1/" id="article-nav-older" class="article-nav-link-wrap">
+      <i class="fa fa-chevron-left pull-left"></i>
+      <span class="article-nav-link-title">AI生成文本去除重复性方面的研究 1 翻译</span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+
+  
+</article>
+
+
+
+
+        </div>
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          
+  <div class="sidebar-module sidebar-module-inset">
+  <h4>About</h4>
+  <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+
+</div>
+
+
+  
+
+
+  
+  <div class="sidebar-module">
+    <h4>Tags</h4>
+    <ul class="sidebar-module-list" itemprop="keywords"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a><span class="sidebar-module-list-count">2</span></li></ul>
+  </div>
+
+
+
+  
+  <div class="sidebar-module">
+    <h4>Tag Cloud</h4>
+    <p class="tagcloud">
+      <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 20px;">论文</a>
+    </p>
+  </div>
+
+
+  
+  <div class="sidebar-module">
+    <h4>Archives</h4>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2026/09/">September 2026</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2026/08/">August 2026</a><span class="sidebar-module-list-count">2</span></li></ul>
+  </div>
+
+
+
+  
+  <div class="sidebar-module">
+    <h4>Recents</h4>
+    <ul class="sidebar-module-list">
+      
+        <li>
+          <a href="/2026/09/02/essayfrance/">法语功能词占比的历时演变：词表法实测报告</a>
+        </li>
+      
+        <li>
+          <a href="/2026/09/01/essay1/">AI生成文本去除重复性方面的研究 1 翻译</a>
+        </li>
+      
+        <li>
+          <a href="/2026/08/28/hello-world/">Hello World</a>
+        </li>
+      
+        <li>
+          <a href="/2026/08/28/tree/">树链剖分模板</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+        </div>
+    </div>
+  </div>
+  <footer class="blog-footer">
+  <div class="container">
+    <div id="footer-info" class="inner">
+      &copy; 2026 BantMetor<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+  
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" integrity="sha384-8gBf6Y4YYq7Jx97PIqmTwLPin4hxIzQw5aDmUg/DDhul9fFpbbLcLh3nTIIDJKhx" crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+</body>
+</html>
